@@ -1,0 +1,477 @@
+---
+name: "RoundRobin"
+description: "Distribute tasks evenly across agents in a rotating pattern for balanced workload distribution"
+---
+
+**Swarm Type**: `RoundRobin`
+
+## Overview
+
+The RoundRobin swarm type distributes tasks across agents in a rotating, circular pattern. Each agent receives tasks in turn, ensuring even workload distribution and preventing any single agent from becoming a bottleneck. This architecture is ideal for processing multiple similar tasks where load balancing is important.
+
+Key features:
+- **Even Distribution**: Tasks are distributed equally among agents
+- **Load Balancing**: Prevents overloading individual agents
+- **Predictable Assignment**: Clear, deterministic task routing
+- **Scalable**: Easily add more agents to increase throughput
+
+## Use Cases
+
+- Batch processing of similar tasks
+- Customer support ticket routing
+- Document processing pipelines
+- API request load balancing
+- Parallel content generation
+- Data validation across multiple validators
+
+## API Usage
+
+### Basic RoundRobin Example
+
+<Tabs>
+<Tab title="Shell (curl)">
+```bash
+curl -X POST "https://api.swarms.world/v1/swarm/completions" \
+  -H "x-api-key: $SWARMS_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Content Generation Pool",
+    "description": "Round-robin content generation across multiple agents",
+    "swarm_type": "RoundRobin",
+    "tasks": [
+      "Write a product description for a wireless Bluetooth headphone",
+      "Write a product description for a smart fitness tracker",
+      "Write a product description for a portable phone charger",
+      "Write a product description for a laptop cooling pad",
+      "Write a product description for a USB-C hub",
+      "Write a product description for a mechanical keyboard"
+    ],
+    "agents": [
+      {
+        "agent_name": "Content Writer A",
+        "description": "Professional product copywriter",
+        "system_prompt": "You are an expert product copywriter. Create compelling, SEO-friendly product descriptions that highlight key features and benefits. Keep descriptions concise but persuasive.",
+        "model_name": "gpt-4o",
+        "max_loops": 1,
+        "temperature": 0.7
+      },
+      {
+        "agent_name": "Content Writer B",
+        "description": "Professional product copywriter",
+        "system_prompt": "You are an expert product copywriter. Create compelling, SEO-friendly product descriptions that highlight key features and benefits. Keep descriptions concise but persuasive.",
+        "model_name": "gpt-4o",
+        "max_loops": 1,
+        "temperature": 0.7
+      },
+      {
+        "agent_name": "Content Writer C",
+        "description": "Professional product copywriter",
+        "system_prompt": "You are an expert product copywriter. Create compelling, SEO-friendly product descriptions that highlight key features and benefits. Keep descriptions concise but persuasive.",
+        "model_name": "gpt-4o",
+        "max_loops": 1,
+        "temperature": 0.7
+      }
+    ],
+    "max_loops": 1
+  }'
+```
+</Tab>
+
+<Tab title="Python (requests)">
+```python
+import requests
+import json
+
+API_BASE_URL = "https://api.swarms.world"
+API_KEY = "your_api_key_here"
+
+headers = {
+    "x-api-key": API_KEY,
+    "Content-Type": "application/json"
+}
+
+swarm_config = {
+    "name": "Content Generation Pool",
+    "description": "Round-robin content generation across multiple agents",
+    "swarm_type": "RoundRobin",
+    "tasks": [
+        "Write a product description for a wireless Bluetooth headphone",
+        "Write a product description for a smart fitness tracker",
+        "Write a product description for a portable phone charger",
+        "Write a product description for a laptop cooling pad",
+        "Write a product description for a USB-C hub",
+        "Write a product description for a mechanical keyboard"
+    ],
+    "agents": [
+        {
+            "agent_name": "Content Writer A",
+            "description": "Professional product copywriter",
+            "system_prompt": "You are an expert product copywriter. Create compelling, SEO-friendly product descriptions that highlight key features and benefits. Keep descriptions concise but persuasive.",
+            "model_name": "gpt-4o",
+            "max_loops": 1,
+            "temperature": 0.7
+        },
+        {
+            "agent_name": "Content Writer B",
+            "description": "Professional product copywriter",
+            "system_prompt": "You are an expert product copywriter. Create compelling, SEO-friendly product descriptions that highlight key features and benefits. Keep descriptions concise but persuasive.",
+            "model_name": "gpt-4o",
+            "max_loops": 1,
+            "temperature": 0.7
+        },
+        {
+            "agent_name": "Content Writer C",
+            "description": "Professional product copywriter",
+            "system_prompt": "You are an expert product copywriter. Create compelling, SEO-friendly product descriptions that highlight key features and benefits. Keep descriptions concise but persuasive.",
+            "model_name": "gpt-4o",
+            "max_loops": 1,
+            "temperature": 0.7
+        }
+    ],
+    "max_loops": 1
+}
+
+response = requests.post(
+    f"{API_BASE_URL}/v1/swarm/completions",
+    headers=headers,
+    json=swarm_config
+)
+
+if response.status_code == 200:
+    result = response.json()
+    print("RoundRobin swarm completed successfully!")
+    print(f"Tasks processed: {len(result['output'])}")
+    print(f"Cost: ${result['metadata']['billing_info']['total_cost']}")
+    for item in result['output']:
+        print(f"\nAgent: {item['agent']}")
+        print(f"Task: {item['task']}")
+        print(f"Result: {item['content'][:200]}...")
+else:
+    print(f"Error: {response.status_code} - {response.text}")
+```
+</Tab>
+
+<Tab title="JavaScript (fetch)">
+```javascript
+const API_BASE_URL = "https://api.swarms.world";
+const API_KEY = "your_api_key_here";
+
+const headers = {
+    "x-api-key": API_KEY,
+    "Content-Type": "application/json"
+};
+
+const swarmConfig = {
+    name: "Content Generation Pool",
+    description: "Round-robin content generation across multiple agents",
+    swarm_type: "RoundRobin",
+    tasks: [
+        "Write a product description for a wireless Bluetooth headphone",
+        "Write a product description for a smart fitness tracker",
+        "Write a product description for a portable phone charger",
+        "Write a product description for a laptop cooling pad",
+        "Write a product description for a USB-C hub",
+        "Write a product description for a mechanical keyboard"
+    ],
+    agents: [
+        {
+            agent_name: "Content Writer A",
+            description: "Professional product copywriter",
+            system_prompt: "You are an expert product copywriter. Create compelling, SEO-friendly product descriptions that highlight key features and benefits. Keep descriptions concise but persuasive.",
+            model_name: "gpt-4o",
+            max_loops: 1,
+            temperature: 0.7
+        },
+        {
+            agent_name: "Content Writer B",
+            description: "Professional product copywriter",
+            system_prompt: "You are an expert product copywriter. Create compelling, SEO-friendly product descriptions that highlight key features and benefits. Keep descriptions concise but persuasive.",
+            model_name: "gpt-4o",
+            max_loops: 1,
+            temperature: 0.7
+        },
+        {
+            agent_name: "Content Writer C",
+            description: "Professional product copywriter",
+            system_prompt: "You are an expert product copywriter. Create compelling, SEO-friendly product descriptions that highlight key features and benefits. Keep descriptions concise but persuasive.",
+            model_name: "gpt-4o",
+            max_loops: 1,
+            temperature: 0.7
+        }
+    ],
+    max_loops: 1
+};
+
+fetch(`${API_BASE_URL}/v1/swarm/completions`, {
+    method: "POST",
+    headers: headers,
+    body: JSON.stringify(swarmConfig)
+})
+.then(response => response.json())
+.then(result => {
+    if (result.status === "success") {
+        console.log("RoundRobin swarm completed successfully!");
+        console.log(`Tasks processed: ${result.output.length}`);
+        console.log(`Cost: $${result.metadata.billing_info.total_cost}`);
+        result.output.forEach(item => {
+            console.log(`\nAgent: ${item.agent}`);
+            console.log(`Task: ${item.task}`);
+        });
+    }
+})
+.catch(error => console.error("Error:", error));
+```
+</Tab>
+
+<Tab title="Go">
+```go
+package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "fmt"
+    "io/ioutil"
+    "net/http"
+)
+
+type Agent struct {
+    AgentName    string  `json:"agent_name"`
+    Description  string  `json:"description"`
+    SystemPrompt string  `json:"system_prompt"`
+    ModelName    string  `json:"model_name"`
+    MaxLoops     int     `json:"max_loops"`
+    Temperature  float64 `json:"temperature"`
+}
+
+type SwarmConfig struct {
+    Name        string   `json:"name"`
+    Description string   `json:"description"`
+    SwarmType   string   `json:"swarm_type"`
+    Tasks       []string `json:"tasks"`
+    Agents      []Agent  `json:"agents"`
+    MaxLoops    int      `json:"max_loops"`
+}
+
+func main() {
+    API_BASE_URL := "https://api.swarms.world"
+    API_KEY := "your_api_key_here"
+
+    swarmConfig := SwarmConfig{
+        Name:        "Content Generation Pool",
+        Description: "Round-robin content generation across multiple agents",
+        SwarmType:   "RoundRobin",
+        Tasks: []string{
+            "Write a product description for a wireless Bluetooth headphone",
+            "Write a product description for a smart fitness tracker",
+            "Write a product description for a portable phone charger",
+            "Write a product description for a laptop cooling pad",
+            "Write a product description for a USB-C hub",
+            "Write a product description for a mechanical keyboard",
+        },
+        Agents: []Agent{
+            {
+                AgentName:    "Content Writer A",
+                Description:  "Professional product copywriter",
+                SystemPrompt: "You are an expert product copywriter. Create compelling, SEO-friendly product descriptions that highlight key features and benefits.",
+                ModelName:    "gpt-4o",
+                MaxLoops:     1,
+                Temperature:  0.7,
+            },
+            {
+                AgentName:    "Content Writer B",
+                Description:  "Professional product copywriter",
+                SystemPrompt: "You are an expert product copywriter. Create compelling, SEO-friendly product descriptions that highlight key features and benefits.",
+                ModelName:    "gpt-4o",
+                MaxLoops:     1,
+                Temperature:  0.7,
+            },
+            {
+                AgentName:    "Content Writer C",
+                Description:  "Professional product copywriter",
+                SystemPrompt: "You are an expert product copywriter. Create compelling, SEO-friendly product descriptions that highlight key features and benefits.",
+                ModelName:    "gpt-4o",
+                MaxLoops:     1,
+                Temperature:  0.7,
+            },
+        },
+        MaxLoops: 1,
+    }
+
+    jsonData, _ := json.Marshal(swarmConfig)
+
+    req, _ := http.NewRequest("POST", API_BASE_URL+"/v1/swarm/completions", bytes.NewBuffer(jsonData))
+    req.Header.Set("x-api-key", API_KEY)
+    req.Header.Set("Content-Type", "application/json")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Printf("Error: %v\n", err)
+        return
+    }
+    defer resp.Body.Close()
+
+    body, _ := ioutil.ReadAll(resp.Body)
+    fmt.Printf("Response: %s\n", string(body))
+}
+```
+</Tab>
+
+<Tab title="Rust">
+```rust
+use reqwest::Client;
+use serde_json::{json, Value};
+use std::error::Error;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn Error>> {
+    let api_base_url = "https://api.swarms.world";
+    let api_key = "your_api_key_here";
+
+    let swarm_config = json!({
+        "name": "Content Generation Pool",
+        "description": "Round-robin content generation across multiple agents",
+        "swarm_type": "RoundRobin",
+        "tasks": [
+            "Write a product description for a wireless Bluetooth headphone",
+            "Write a product description for a smart fitness tracker",
+            "Write a product description for a portable phone charger",
+            "Write a product description for a laptop cooling pad",
+            "Write a product description for a USB-C hub",
+            "Write a product description for a mechanical keyboard"
+        ],
+        "agents": [
+            {
+                "agent_name": "Content Writer A",
+                "description": "Professional product copywriter",
+                "system_prompt": "You are an expert product copywriter. Create compelling, SEO-friendly product descriptions.",
+                "model_name": "gpt-4o",
+                "max_loops": 1,
+                "temperature": 0.7
+            },
+            {
+                "agent_name": "Content Writer B",
+                "description": "Professional product copywriter",
+                "system_prompt": "You are an expert product copywriter. Create compelling, SEO-friendly product descriptions.",
+                "model_name": "gpt-4o",
+                "max_loops": 1,
+                "temperature": 0.7
+            },
+            {
+                "agent_name": "Content Writer C",
+                "description": "Professional product copywriter",
+                "system_prompt": "You are an expert product copywriter. Create compelling, SEO-friendly product descriptions.",
+                "model_name": "gpt-4o",
+                "max_loops": 1,
+                "temperature": 0.7
+            }
+        ],
+        "max_loops": 1
+    });
+
+    let client = Client::new();
+    let response = client
+        .post(&format!("{}/v1/swarm/completions", api_base_url))
+        .header("x-api-key", api_key)
+        .header("Content-Type", "application/json")
+        .json(&swarm_config)
+        .send()
+        .await?;
+
+    if response.status().is_success() {
+        let result: Value = response.json().await?;
+        println!("RoundRobin swarm completed successfully!");
+        println!("Response: {:?}", result);
+    } else {
+        println!("Error: {}", response.status());
+    }
+
+    Ok(())
+}
+```
+</Tab>
+</Tabs>
+
+**Example Response**:
+```json
+{
+    "job_id": "swarms-R17nZFDesmLHxCRoeyF3NVYvPaXk",
+    "status": "success",
+    "swarm_name": "Content Generation Pool",
+    "description": "Round-robin content generation across multiple agents",
+    "swarm_type": "RoundRobin",
+    "output": [
+        {
+            "task_index": 0,
+            "task": "Write a product description for a wireless Bluetooth headphone",
+            "agent": "Content Writer A",
+            "content": "Experience pure audio freedom with our premium wireless Bluetooth headphones. Featuring advanced noise cancellation..."
+        },
+        {
+            "task_index": 1,
+            "task": "Write a product description for a smart fitness tracker",
+            "agent": "Content Writer B",
+            "content": "Take control of your health journey with our intelligent fitness tracker. Monitor your heart rate, sleep patterns..."
+        },
+        {
+            "task_index": 2,
+            "task": "Write a product description for a portable phone charger",
+            "agent": "Content Writer C",
+            "content": "Never run out of power again with our ultra-compact portable charger. With 20,000mAh capacity..."
+        },
+        {
+            "task_index": 3,
+            "task": "Write a product description for a laptop cooling pad",
+            "agent": "Content Writer A",
+            "content": "Keep your laptop running cool and quiet with our advanced cooling pad. Five ultra-quiet fans..."
+        },
+        {
+            "task_index": 4,
+            "task": "Write a product description for a USB-C hub",
+            "agent": "Content Writer B",
+            "content": "Expand your connectivity with our versatile USB-C hub. Transform a single port into 7 connections..."
+        },
+        {
+            "task_index": 5,
+            "task": "Write a product description for a mechanical keyboard",
+            "agent": "Content Writer C",
+            "content": "Elevate your typing experience with our premium mechanical keyboard. Cherry MX switches deliver..."
+        }
+    ],
+    "distribution": {
+        "Content Writer A": 2,
+        "Content Writer B": 2,
+        "Content Writer C": 2
+    },
+    "number_of_agents": 3,
+    "tasks_processed": 6,
+    "service_tier": "standard",
+    "execution_time": 18.4,
+    "usage": {
+        "input_tokens": 180,
+        "output_tokens": 2400,
+        "total_tokens": 2580,
+        "billing_info": {
+            "cost_breakdown": {
+                "agent_cost": 0.03,
+                "input_token_cost": 0.00054,
+                "output_token_cost": 0.036,
+                "num_agents": 3,
+                "service_tier": "standard"
+            },
+            "total_cost": 0.06654
+        }
+    }
+}
+```
+
+## Best Practices
+
+- Use RoundRobin for homogeneous tasks that can be handled by any agent
+- Configure agents with identical capabilities for consistent results
+- Scale the number of agents based on your task volume
+- Consider task complexity when determining agent count
+- Use `tasks` array (plural) for multiple tasks to be distributed
+- Monitor distribution metrics to ensure even load balancing
+

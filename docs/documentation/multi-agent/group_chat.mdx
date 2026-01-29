@@ -1,0 +1,462 @@
+---
+name: "GroupChat"
+description: "Collaborative multi-agent swarm where agents engage in dynamic conversation to solve problems together through interactive discussion"
+---
+
+**Swarm Type**: `GroupChat`
+
+## Overview
+
+The GroupChat swarm type enables multiple agents to engage in collaborative, conversational problem-solving. Agents interact with each other in a dynamic discussion format, building on each other's ideas, challenging assumptions, and working together to arrive at comprehensive solutions. This architecture mimics human team discussions and is ideal for tasks requiring brainstorming, collaborative analysis, or consensus-building.
+
+Key features:
+- **Dynamic Conversation**: Agents engage in back-and-forth dialogue
+- **Collaborative Problem-Solving**: Multiple perspectives contribute to solutions
+- **Idea Building**: Agents can expand on or refine each other's contributions
+- **Natural Workflow**: Mimics human team discussions and meetings
+
+## Use Cases
+
+- Brainstorming sessions for creative solutions
+- Collaborative code review and debugging
+- Strategic planning and decision-making
+- Complex problem analysis requiring multiple expert perspectives
+- Team-based research and analysis
+
+## API Usage
+
+### Basic GroupChat Example
+
+<Tabs>
+<Tab title="Shell (curl)">
+```bash
+curl -X POST "https://api.swarms.world/v1/swarm/completions" \
+  -H "x-api-key: $SWARMS_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Product Strategy Discussion",
+    "description": "Collaborative team discussion on product strategy",
+    "swarm_type": "GroupChat",
+    "task": "Discuss and develop a go-to-market strategy for a new AI-powered productivity app targeting remote workers",
+    "agents": [
+      {
+        "agent_name": "Product Manager",
+        "description": "Leads product strategy and prioritization",
+        "system_prompt": "You are an experienced product manager. Focus on user needs, market fit, and product roadmap. Engage with other team members, build on their ideas, and guide the discussion toward actionable strategies.",
+        "model_name": "gpt-4o",
+        "max_loops": 1,
+        "temperature": 0.7
+      },
+      {
+        "agent_name": "Marketing Lead",
+        "description": "Develops marketing and positioning strategies",
+        "system_prompt": "You are a marketing strategist. Focus on market positioning, messaging, and go-to-market tactics. Collaborate with the team, ask clarifying questions, and propose creative marketing approaches.",
+        "model_name": "gpt-4o",
+        "max_loops": 1,
+        "temperature": 0.7
+      },
+      {
+        "agent_name": "Technical Architect",
+        "description": "Provides technical feasibility insights",
+        "system_prompt": "You are a technical architect. Focus on technical feasibility, implementation considerations, and potential technical differentiators. Engage constructively with non-technical suggestions and provide practical insights.",
+        "model_name": "gpt-4o",
+        "max_loops": 1,
+        "temperature": 0.5
+      },
+      {
+        "agent_name": "Business Analyst",
+        "description": "Analyzes market data and competitive landscape",
+        "system_prompt": "You are a business analyst. Focus on market analysis, competitive intelligence, and business metrics. Support the team with data-driven insights and challenge assumptions when needed.",
+        "model_name": "gpt-4o",
+        "max_loops": 1,
+        "temperature": 0.4
+      }
+    ],
+    "max_loops": 3
+  }'
+```
+</Tab>
+
+<Tab title="Python (requests)">
+```python
+import requests
+import json
+
+API_BASE_URL = "https://api.swarms.world"
+API_KEY = "your_api_key_here"
+
+headers = {
+    "x-api-key": API_KEY,
+    "Content-Type": "application/json"
+}
+
+swarm_config = {
+    "name": "Product Strategy Discussion",
+    "description": "Collaborative team discussion on product strategy",
+    "swarm_type": "GroupChat",
+    "task": "Discuss and develop a go-to-market strategy for a new AI-powered productivity app targeting remote workers",
+    "agents": [
+        {
+            "agent_name": "Product Manager",
+            "description": "Leads product strategy and prioritization",
+            "system_prompt": "You are an experienced product manager. Focus on user needs, market fit, and product roadmap. Engage with other team members, build on their ideas, and guide the discussion toward actionable strategies.",
+            "model_name": "gpt-4o",
+            "max_loops": 1,
+            "temperature": 0.7
+        },
+        {
+            "agent_name": "Marketing Lead",
+            "description": "Develops marketing and positioning strategies",
+            "system_prompt": "You are a marketing strategist. Focus on market positioning, messaging, and go-to-market tactics. Collaborate with the team, ask clarifying questions, and propose creative marketing approaches.",
+            "model_name": "gpt-4o",
+            "max_loops": 1,
+            "temperature": 0.7
+        },
+        {
+            "agent_name": "Technical Architect",
+            "description": "Provides technical feasibility insights",
+            "system_prompt": "You are a technical architect. Focus on technical feasibility, implementation considerations, and potential technical differentiators. Engage constructively with non-technical suggestions and provide practical insights.",
+            "model_name": "gpt-4o",
+            "max_loops": 1,
+            "temperature": 0.5
+        },
+        {
+            "agent_name": "Business Analyst",
+            "description": "Analyzes market data and competitive landscape",
+            "system_prompt": "You are a business analyst. Focus on market analysis, competitive intelligence, and business metrics. Support the team with data-driven insights and challenge assumptions when needed.",
+            "model_name": "gpt-4o",
+            "max_loops": 1,
+            "temperature": 0.4
+        }
+    ],
+    "max_loops": 3
+}
+
+response = requests.post(
+    f"{API_BASE_URL}/v1/swarm/completions",
+    headers=headers,
+    json=swarm_config
+)
+
+if response.status_code == 200:
+    result = response.json()
+    print("GroupChat swarm completed successfully!")
+    print(f"Cost: ${result['metadata']['billing_info']['total_cost']}")
+    print(f"Execution time: {result['metadata']['execution_time_seconds']} seconds")
+    print(f"Discussion results: {result['output']}")
+else:
+    print(f"Error: {response.status_code} - {response.text}")
+```
+</Tab>
+
+<Tab title="JavaScript (fetch)">
+```javascript
+const API_BASE_URL = "https://api.swarms.world";
+const API_KEY = "your_api_key_here";
+
+const headers = {
+    "x-api-key": API_KEY,
+    "Content-Type": "application/json"
+};
+
+const swarmConfig = {
+    name: "Product Strategy Discussion",
+    description: "Collaborative team discussion on product strategy",
+    swarm_type: "GroupChat",
+    task: "Discuss and develop a go-to-market strategy for a new AI-powered productivity app targeting remote workers",
+    agents: [
+        {
+            agent_name: "Product Manager",
+            description: "Leads product strategy and prioritization",
+            system_prompt: "You are an experienced product manager. Focus on user needs, market fit, and product roadmap. Engage with other team members, build on their ideas, and guide the discussion toward actionable strategies.",
+            model_name: "gpt-4o",
+            max_loops: 1,
+            temperature: 0.7
+        },
+        {
+            agent_name: "Marketing Lead",
+            description: "Develops marketing and positioning strategies",
+            system_prompt: "You are a marketing strategist. Focus on market positioning, messaging, and go-to-market tactics. Collaborate with the team, ask clarifying questions, and propose creative marketing approaches.",
+            model_name: "gpt-4o",
+            max_loops: 1,
+            temperature: 0.7
+        },
+        {
+            agent_name: "Technical Architect",
+            description: "Provides technical feasibility insights",
+            system_prompt: "You are a technical architect. Focus on technical feasibility, implementation considerations, and potential technical differentiators. Engage constructively with non-technical suggestions and provide practical insights.",
+            model_name: "gpt-4o",
+            max_loops: 1,
+            temperature: 0.5
+        },
+        {
+            agent_name: "Business Analyst",
+            description: "Analyzes market data and competitive landscape",
+            system_prompt: "You are a business analyst. Focus on market analysis, competitive intelligence, and business metrics. Support the team with data-driven insights and challenge assumptions when needed.",
+            model_name: "gpt-4o",
+            max_loops: 1,
+            temperature: 0.4
+        }
+    ],
+    max_loops: 3
+};
+
+fetch(`${API_BASE_URL}/v1/swarm/completions`, {
+    method: "POST",
+    headers: headers,
+    body: JSON.stringify(swarmConfig)
+})
+.then(response => response.json())
+.then(result => {
+    if (result.status === "success") {
+        console.log("GroupChat swarm completed successfully!");
+        console.log(`Cost: $${result.metadata.billing_info.total_cost}`);
+        console.log(`Execution time: ${result.metadata.execution_time_seconds} seconds`);
+        console.log("Discussion results:", result.output);
+    }
+})
+.catch(error => console.error("Error:", error));
+```
+</Tab>
+
+<Tab title="Go">
+```go
+package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "fmt"
+    "io/ioutil"
+    "net/http"
+)
+
+type Agent struct {
+    AgentName    string  `json:"agent_name"`
+    Description  string  `json:"description"`
+    SystemPrompt string  `json:"system_prompt"`
+    ModelName    string  `json:"model_name"`
+    MaxLoops     int     `json:"max_loops"`
+    Temperature  float64 `json:"temperature"`
+}
+
+type SwarmConfig struct {
+    Name        string   `json:"name"`
+    Description string   `json:"description"`
+    SwarmType   string   `json:"swarm_type"`
+    Task        string   `json:"task"`
+    Agents      []Agent  `json:"agents"`
+    MaxLoops    int      `json:"max_loops"`
+}
+
+func main() {
+    API_BASE_URL := "https://api.swarms.world"
+    API_KEY := "your_api_key_here"
+
+    swarmConfig := SwarmConfig{
+        Name:        "Product Strategy Discussion",
+        Description: "Collaborative team discussion on product strategy",
+        SwarmType:   "GroupChat",
+        Task:        "Discuss and develop a go-to-market strategy for a new AI-powered productivity app targeting remote workers",
+        Agents: []Agent{
+            {
+                AgentName:    "Product Manager",
+                Description:  "Leads product strategy and prioritization",
+                SystemPrompt: "You are an experienced product manager. Focus on user needs, market fit, and product roadmap. Engage with other team members, build on their ideas, and guide the discussion toward actionable strategies.",
+                ModelName:    "gpt-4o",
+                MaxLoops:     1,
+                Temperature:  0.7,
+            },
+            {
+                AgentName:    "Marketing Lead",
+                Description:  "Develops marketing and positioning strategies",
+                SystemPrompt: "You are a marketing strategist. Focus on market positioning, messaging, and go-to-market tactics. Collaborate with the team, ask clarifying questions, and propose creative marketing approaches.",
+                ModelName:    "gpt-4o",
+                MaxLoops:     1,
+                Temperature:  0.7,
+            },
+            {
+                AgentName:    "Technical Architect",
+                Description:  "Provides technical feasibility insights",
+                SystemPrompt: "You are a technical architect. Focus on technical feasibility, implementation considerations, and potential technical differentiators. Engage constructively with non-technical suggestions and provide practical insights.",
+                ModelName:    "gpt-4o",
+                MaxLoops:     1,
+                Temperature:  0.5,
+            },
+            {
+                AgentName:    "Business Analyst",
+                Description:  "Analyzes market data and competitive landscape",
+                SystemPrompt: "You are a business analyst. Focus on market analysis, competitive intelligence, and business metrics. Support the team with data-driven insights and challenge assumptions when needed.",
+                ModelName:    "gpt-4o",
+                MaxLoops:     1,
+                Temperature:  0.4,
+            },
+        },
+        MaxLoops: 3,
+    }
+
+    jsonData, _ := json.Marshal(swarmConfig)
+
+    req, _ := http.NewRequest("POST", API_BASE_URL+"/v1/swarm/completions", bytes.NewBuffer(jsonData))
+    req.Header.Set("x-api-key", API_KEY)
+    req.Header.Set("Content-Type", "application/json")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Printf("Error: %v\n", err)
+        return
+    }
+    defer resp.Body.Close()
+
+    body, _ := ioutil.ReadAll(resp.Body)
+    fmt.Printf("Response: %s\n", string(body))
+}
+```
+</Tab>
+
+<Tab title="Rust">
+```rust
+use reqwest::Client;
+use serde_json::{json, Value};
+use std::error::Error;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn Error>> {
+    let api_base_url = "https://api.swarms.world";
+    let api_key = "your_api_key_here";
+
+    let swarm_config = json!({
+        "name": "Product Strategy Discussion",
+        "description": "Collaborative team discussion on product strategy",
+        "swarm_type": "GroupChat",
+        "task": "Discuss and develop a go-to-market strategy for a new AI-powered productivity app targeting remote workers",
+        "agents": [
+            {
+                "agent_name": "Product Manager",
+                "description": "Leads product strategy and prioritization",
+                "system_prompt": "You are an experienced product manager. Focus on user needs, market fit, and product roadmap. Engage with other team members, build on their ideas, and guide the discussion toward actionable strategies.",
+                "model_name": "gpt-4o",
+                "max_loops": 1,
+                "temperature": 0.7
+            },
+            {
+                "agent_name": "Marketing Lead",
+                "description": "Develops marketing and positioning strategies",
+                "system_prompt": "You are a marketing strategist. Focus on market positioning, messaging, and go-to-market tactics. Collaborate with the team, ask clarifying questions, and propose creative marketing approaches.",
+                "model_name": "gpt-4o",
+                "max_loops": 1,
+                "temperature": 0.7
+            },
+            {
+                "agent_name": "Technical Architect",
+                "description": "Provides technical feasibility insights",
+                "system_prompt": "You are a technical architect. Focus on technical feasibility, implementation considerations, and potential technical differentiators. Engage constructively with non-technical suggestions and provide practical insights.",
+                "model_name": "gpt-4o",
+                "max_loops": 1,
+                "temperature": 0.5
+            },
+            {
+                "agent_name": "Business Analyst",
+                "description": "Analyzes market data and competitive landscape",
+                "system_prompt": "You are a business analyst. Focus on market analysis, competitive intelligence, and business metrics. Support the team with data-driven insights and challenge assumptions when needed.",
+                "model_name": "gpt-4o",
+                "max_loops": 1,
+                "temperature": 0.4
+            }
+        ],
+        "max_loops": 3
+    });
+
+    let client = Client::new();
+    let response = client
+        .post(&format!("{}/v1/swarm/completions", api_base_url))
+        .header("x-api-key", api_key)
+        .header("Content-Type", "application/json")
+        .json(&swarm_config)
+        .send()
+        .await?;
+
+    if response.status().is_success() {
+        let result: Value = response.json().await?;
+        println!("GroupChat swarm completed successfully!");
+        println!("Response: {:?}", result);
+    } else {
+        println!("Error: {}", response.status());
+    }
+
+    Ok(())
+}
+```
+</Tab>
+</Tabs>
+
+**Example Response**:
+```json
+{
+    "job_id": "swarms-G17nZFDesmLHxCRoeyF3NVYvPaXk",
+    "status": "success",
+    "swarm_name": "Product Strategy Discussion",
+    "description": "Collaborative team discussion on product strategy",
+    "swarm_type": "GroupChat",
+    "output": [
+        {
+            "round": 1,
+            "messages": [
+                {
+                    "role": "Product Manager",
+                    "content": "Let's start by identifying our target user personas. Remote workers have diverse needs - from freelancers to enterprise employees..."
+                },
+                {
+                    "role": "Marketing Lead",
+                    "content": "Building on that, I think we should focus on the 'overwhelmed professional' persona. Our messaging could center on 'reclaim your focus'..."
+                },
+                {
+                    "role": "Technical Architect",
+                    "content": "From a technical standpoint, we could differentiate with on-device AI processing for privacy-conscious users..."
+                },
+                {
+                    "role": "Business Analyst",
+                    "content": "The productivity app market is valued at $96B. However, our competitive analysis shows a gap in AI-native solutions..."
+                }
+            ]
+        },
+        {
+            "round": 2,
+            "messages": [
+                {
+                    "role": "Product Manager",
+                    "content": "Great insights. Let's narrow down to three key differentiators: privacy-first AI, seamless integrations, and intelligent automation..."
+                }
+            ]
+        }
+    ],
+    "number_of_agents": 4,
+    "service_tier": "standard",
+    "execution_time": 45.8,
+    "usage": {
+        "input_tokens": 120,
+        "output_tokens": 4500,
+        "total_tokens": 4620,
+        "billing_info": {
+            "cost_breakdown": {
+                "agent_cost": 0.04,
+                "input_token_cost": 0.00036,
+                "output_token_cost": 0.0675,
+                "num_agents": 4,
+                "service_tier": "standard"
+            },
+            "total_cost": 0.10786
+        }
+    }
+}
+```
+
+## Best Practices
+
+- Design agents with complementary expertise for richer discussions
+- Use higher temperature values (0.6-0.8) to encourage creative dialogue
+- Set appropriate `max_loops` to allow sufficient rounds of discussion
+- Include agents that can challenge assumptions for more robust outcomes
+- Use system prompts that encourage collaborative behavior and building on others' ideas
+

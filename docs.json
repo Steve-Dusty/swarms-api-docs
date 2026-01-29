@@ -74,6 +74,13 @@
               "docs/documentation/multi-agent/majority_voting",
               "docs/documentation/multi-agent/hierarchical_swarm",
               "docs/documentation/multi-agent/agent_rearrange",
+              "docs/documentation/multi-agent/group_chat",
+              "docs/documentation/multi-agent/auto_swarm_builder",
+              "docs/documentation/multi-agent/round_robin",
+              "docs/documentation/multi-agent/spreadsheet_swarm",
+              "docs/documentation/multi-agent/debate_with_judge",
+              "docs/documentation/multi-agent/heavy_swarm",
+              "docs/documentation/multi-agent/auto",
               "docs/documentation/multi-agent/batched_grid_workflow",
               "docs/documentation/multi-agent/advanced_research",
               "docs/documentation/multi-agent/graph_workflow"

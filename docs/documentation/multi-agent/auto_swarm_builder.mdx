@@ -1,0 +1,329 @@
+---
+name: "AutoSwarmBuilder"
+description: "Automatically generate and configure optimal swarm architectures based on task requirements"
+---
+
+**Swarm Type**: `AutoSwarmBuilder`
+
+## Overview
+
+The AutoSwarmBuilder swarm type automatically analyzes your task and generates an optimal swarm configuration. Instead of manually designing agent teams and selecting swarm architectures, AutoSwarmBuilder intelligently determines the best structure, creates appropriate agents, and orchestrates their collaboration. This is ideal for users who want powerful multi-agent capabilities without deep expertise in swarm design.
+
+Key features:
+- **Automatic Agent Generation**: Creates specialized agents based on task analysis
+- **Intelligent Architecture Selection**: Chooses the optimal swarm type for your task
+- **Adaptive Configuration**: Adjusts parameters based on task complexity
+- **Zero Configuration**: Get started with just a task description
+
+## Use Cases
+
+- Rapid prototyping of multi-agent solutions
+- Tasks where optimal swarm architecture is unclear
+- Users new to multi-agent systems
+- Complex tasks requiring automatic decomposition
+- Dynamic workloads with varying requirements
+
+## API Usage
+
+### Basic AutoSwarmBuilder Example
+
+<Tabs>
+<Tab title="Shell (curl)">
+```bash
+curl -X POST "https://api.swarms.world/v1/swarm/completions" \
+  -H "x-api-key: $SWARMS_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Auto-Generated Research Team",
+    "description": "Automatically build optimal swarm for research task",
+    "swarm_type": "AutoSwarmBuilder",
+    "task": "Conduct a comprehensive analysis of the current state of quantum computing, including technical challenges, major players, recent breakthroughs, and potential applications in the next 5 years",
+    "max_loops": 1
+  }'
+```
+</Tab>
+
+<Tab title="Python (requests)">
+```python
+import requests
+import json
+
+API_BASE_URL = "https://api.swarms.world"
+API_KEY = "your_api_key_here"
+
+headers = {
+    "x-api-key": API_KEY,
+    "Content-Type": "application/json"
+}
+
+swarm_config = {
+    "name": "Auto-Generated Research Team",
+    "description": "Automatically build optimal swarm for research task",
+    "swarm_type": "AutoSwarmBuilder",
+    "task": "Conduct a comprehensive analysis of the current state of quantum computing, including technical challenges, major players, recent breakthroughs, and potential applications in the next 5 years",
+    "max_loops": 1
+}
+
+response = requests.post(
+    f"{API_BASE_URL}/v1/swarm/completions",
+    headers=headers,
+    json=swarm_config
+)
+
+if response.status_code == 200:
+    result = response.json()
+    print("AutoSwarmBuilder completed successfully!")
+    print(f"Generated swarm type: {result.get('generated_swarm_type', 'N/A')}")
+    print(f"Number of agents created: {result['number_of_agents']}")
+    print(f"Cost: ${result['metadata']['billing_info']['total_cost']}")
+    print(f"Results: {result['output']}")
+else:
+    print(f"Error: {response.status_code} - {response.text}")
+```
+</Tab>
+
+<Tab title="JavaScript (fetch)">
+```javascript
+const API_BASE_URL = "https://api.swarms.world";
+const API_KEY = "your_api_key_here";
+
+const headers = {
+    "x-api-key": API_KEY,
+    "Content-Type": "application/json"
+};
+
+const swarmConfig = {
+    name: "Auto-Generated Research Team",
+    description: "Automatically build optimal swarm for research task",
+    swarm_type: "AutoSwarmBuilder",
+    task: "Conduct a comprehensive analysis of the current state of quantum computing, including technical challenges, major players, recent breakthroughs, and potential applications in the next 5 years",
+    max_loops: 1
+};
+
+fetch(`${API_BASE_URL}/v1/swarm/completions`, {
+    method: "POST",
+    headers: headers,
+    body: JSON.stringify(swarmConfig)
+})
+.then(response => response.json())
+.then(result => {
+    if (result.status === "success") {
+        console.log("AutoSwarmBuilder completed successfully!");
+        console.log(`Generated swarm type: ${result.generated_swarm_type || 'N/A'}`);
+        console.log(`Number of agents created: ${result.number_of_agents}`);
+        console.log(`Cost: $${result.metadata.billing_info.total_cost}`);
+        console.log("Results:", result.output);
+    }
+})
+.catch(error => console.error("Error:", error));
+```
+</Tab>
+
+<Tab title="Go">
+```go
+package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "fmt"
+    "io/ioutil"
+    "net/http"
+)
+
+type SwarmConfig struct {
+    Name        string `json:"name"`
+    Description string `json:"description"`
+    SwarmType   string `json:"swarm_type"`
+    Task        string `json:"task"`
+    MaxLoops    int    `json:"max_loops"`
+}
+
+func main() {
+    API_BASE_URL := "https://api.swarms.world"
+    API_KEY := "your_api_key_here"
+
+    swarmConfig := SwarmConfig{
+        Name:        "Auto-Generated Research Team",
+        Description: "Automatically build optimal swarm for research task",
+        SwarmType:   "AutoSwarmBuilder",
+        Task:        "Conduct a comprehensive analysis of the current state of quantum computing, including technical challenges, major players, recent breakthroughs, and potential applications in the next 5 years",
+        MaxLoops:    1,
+    }
+
+    jsonData, _ := json.Marshal(swarmConfig)
+
+    req, _ := http.NewRequest("POST", API_BASE_URL+"/v1/swarm/completions", bytes.NewBuffer(jsonData))
+    req.Header.Set("x-api-key", API_KEY)
+    req.Header.Set("Content-Type", "application/json")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Printf("Error: %v\n", err)
+        return
+    }
+    defer resp.Body.Close()
+
+    body, _ := ioutil.ReadAll(resp.Body)
+    fmt.Printf("Response: %s\n", string(body))
+}
+```
+</Tab>
+
+<Tab title="Rust">
+```rust
+use reqwest::Client;
+use serde_json::{json, Value};
+use std::error::Error;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn Error>> {
+    let api_base_url = "https://api.swarms.world";
+    let api_key = "your_api_key_here";
+
+    let swarm_config = json!({
+        "name": "Auto-Generated Research Team",
+        "description": "Automatically build optimal swarm for research task",
+        "swarm_type": "AutoSwarmBuilder",
+        "task": "Conduct a comprehensive analysis of the current state of quantum computing, including technical challenges, major players, recent breakthroughs, and potential applications in the next 5 years",
+        "max_loops": 1
+    });
+
+    let client = Client::new();
+    let response = client
+        .post(&format!("{}/v1/swarm/completions", api_base_url))
+        .header("x-api-key", api_key)
+        .header("Content-Type", "application/json")
+        .json(&swarm_config)
+        .send()
+        .await?;
+
+    if response.status().is_success() {
+        let result: Value = response.json().await?;
+        println!("AutoSwarmBuilder completed successfully!");
+        println!("Response: {:?}", result);
+    } else {
+        println!("Error: {}", response.status());
+    }
+
+    Ok(())
+}
+```
+</Tab>
+</Tabs>
+
+### AutoSwarmBuilder with Hints
+
+You can provide optional hints to guide the auto-generation process:
+
+<Tabs>
+<Tab title="Shell (curl)">
+```bash
+curl -X POST "https://api.swarms.world/v1/swarm/completions" \
+  -H "x-api-key: $SWARMS_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Custom Auto-Built Team",
+    "description": "Auto-build with specific requirements",
+    "swarm_type": "AutoSwarmBuilder",
+    "task": "Develop a comprehensive marketing strategy for a B2B SaaS product launching in Q2",
+    "rules": "Focus on digital channels. Prioritize content marketing and ABM strategies. Include budget allocation recommendations.",
+    "max_loops": 2
+  }'
+```
+</Tab>
+
+<Tab title="Python (requests)">
+```python
+import requests
+
+API_BASE_URL = "https://api.swarms.world"
+API_KEY = "your_api_key_here"
+
+headers = {
+    "x-api-key": API_KEY,
+    "Content-Type": "application/json"
+}
+
+swarm_config = {
+    "name": "Custom Auto-Built Team",
+    "description": "Auto-build with specific requirements",
+    "swarm_type": "AutoSwarmBuilder",
+    "task": "Develop a comprehensive marketing strategy for a B2B SaaS product launching in Q2",
+    "rules": "Focus on digital channels. Prioritize content marketing and ABM strategies. Include budget allocation recommendations.",
+    "max_loops": 2
+}
+
+response = requests.post(
+    f"{API_BASE_URL}/v1/swarm/completions",
+    headers=headers,
+    json=swarm_config
+)
+
+result = response.json()
+print(f"Auto-generated agents: {result['number_of_agents']}")
+print(f"Output: {result['output']}")
+```
+</Tab>
+</Tabs>
+
+**Example Response**:
+```json
+{
+    "job_id": "swarms-A17nZFDesmLHxCRoeyF3NVYvPaXk",
+    "status": "success",
+    "swarm_name": "Auto-Generated Research Team",
+    "description": "Automatically build optimal swarm for research task",
+    "swarm_type": "AutoSwarmBuilder",
+    "generated_swarm_type": "MixtureOfAgents",
+    "generated_agents": [
+        {
+            "agent_name": "Quantum Physics Researcher",
+            "role": "Technical expert on quantum computing fundamentals"
+        },
+        {
+            "agent_name": "Industry Analyst",
+            "role": "Analyzes market players and competitive landscape"
+        },
+        {
+            "agent_name": "Technology Forecaster",
+            "role": "Projects future developments and applications"
+        },
+        {
+            "agent_name": "Research Synthesizer",
+            "role": "Combines insights into comprehensive analysis"
+        }
+    ],
+    "output": {
+        "analysis": "Comprehensive quantum computing analysis covering technical foundations, current limitations including decoherence and error rates, major players (IBM, Google, IonQ, Rigetti), recent breakthroughs in error correction, and projected applications in cryptography, drug discovery, and optimization problems..."
+    },
+    "number_of_agents": 4,
+    "service_tier": "standard",
+    "execution_time": 52.3,
+    "usage": {
+        "input_tokens": 80,
+        "output_tokens": 5200,
+        "total_tokens": 5280,
+        "billing_info": {
+            "cost_breakdown": {
+                "agent_cost": 0.04,
+                "input_token_cost": 0.00024,
+                "output_token_cost": 0.078,
+                "num_agents": 4,
+                "service_tier": "standard"
+            },
+            "total_cost": 0.11824
+        }
+    }
+}
+```
+
+## Best Practices
+
+- Provide clear, detailed task descriptions for better auto-generation
+- Use the `rules` parameter to guide agent creation with specific requirements
+- Review generated configurations for production use cases
+- Start with AutoSwarmBuilder for prototyping, then refine manually if needed
+- For repeated tasks, consider saving the generated configuration for direct reuse
+

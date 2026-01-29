@@ -1,0 +1,494 @@
+---
+name: "SpreadSheetSwarm"
+description: "Process and analyze tabular data with multiple specialized agents for financial analysis, data transformation, and batch calculations"
+---
+
+**Swarm Type**: `SpreadSheetSwarm`
+
+## Overview
+
+The SpreadSheetSwarm is designed for processing tabular data, performing financial calculations, and handling batch data operations. Multiple agents work together to analyze rows, columns, or cells of data, making it ideal for financial analysis, data validation, report generation, and complex spreadsheet-like operations at scale.
+
+Key features:
+- **Tabular Data Processing**: Handle data in rows, columns, and cells
+- **Parallel Calculations**: Process multiple data points simultaneously
+- **Financial Analysis**: Built for financial modeling and calculations
+- **Batch Operations**: Efficient processing of large datasets
+- **Data Validation**: Multiple agents can validate and cross-check data
+
+## Use Cases
+
+- Financial statement analysis and reporting
+- Portfolio risk assessment and calculations
+- Data transformation and ETL pipelines
+- Batch invoice or transaction processing
+- Comparative analysis across multiple metrics
+- Budget planning and forecasting
+
+## API Usage
+
+### Basic SpreadSheetSwarm Example
+
+<Tabs>
+<Tab title="Shell (curl)">
+```bash
+curl -X POST "https://api.swarms.world/v1/swarm/completions" \
+  -H "x-api-key: $SWARMS_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Financial Analysis Swarm",
+    "description": "Multi-agent financial data analysis",
+    "swarm_type": "SpreadSheetSwarm",
+    "task": "Analyze the following quarterly financial data and provide insights:\n\nQ1: Revenue $2.5M, Expenses $1.8M, Marketing $300K\nQ2: Revenue $2.8M, Expenses $1.9M, Marketing $350K\nQ3: Revenue $3.2M, Expenses $2.1M, Marketing $400K\nQ4: Revenue $3.8M, Expenses $2.3M, Marketing $450K\n\nCalculate growth rates, profit margins, and ROI on marketing spend.",
+    "agents": [
+      {
+        "agent_name": "Revenue Analyst",
+        "description": "Analyzes revenue trends and growth",
+        "system_prompt": "You are a financial analyst specializing in revenue analysis. Calculate quarter-over-quarter growth rates, identify trends, and provide revenue forecasts. Present findings in a clear, tabular format.",
+        "model_name": "gpt-4o",
+        "max_loops": 1,
+        "temperature": 0.2
+      },
+      {
+        "agent_name": "Cost Analyst",
+        "description": "Analyzes expenses and cost efficiency",
+        "system_prompt": "You are a cost analyst specializing in expense management. Analyze expense ratios, identify cost trends, and calculate operational efficiency metrics. Present findings with clear calculations.",
+        "model_name": "gpt-4o",
+        "max_loops": 1,
+        "temperature": 0.2
+      },
+      {
+        "agent_name": "Marketing ROI Analyst",
+        "description": "Calculates marketing effectiveness",
+        "system_prompt": "You are a marketing analytics specialist. Calculate marketing ROI, customer acquisition costs, and marketing efficiency ratios. Correlate marketing spend with revenue growth.",
+        "model_name": "gpt-4o",
+        "max_loops": 1,
+        "temperature": 0.2
+      },
+      {
+        "agent_name": "Financial Synthesizer",
+        "description": "Combines analyses into executive summary",
+        "system_prompt": "You are a senior financial analyst. Synthesize the analyses from other team members into a comprehensive executive summary with key metrics, insights, and recommendations.",
+        "model_name": "gpt-4o",
+        "max_loops": 1,
+        "temperature": 0.3
+      }
+    ],
+    "max_loops": 1
+  }'
+```
+</Tab>
+
+<Tab title="Python (requests)">
+```python
+import requests
+import json
+
+API_BASE_URL = "https://api.swarms.world"
+API_KEY = "your_api_key_here"
+
+headers = {
+    "x-api-key": API_KEY,
+    "Content-Type": "application/json"
+}
+
+# Financial data to analyze
+financial_data = """
+Analyze the following quarterly financial data and provide insights:
+
+Q1: Revenue $2.5M, Expenses $1.8M, Marketing $300K
+Q2: Revenue $2.8M, Expenses $1.9M, Marketing $350K
+Q3: Revenue $3.2M, Expenses $2.1M, Marketing $400K
+Q4: Revenue $3.8M, Expenses $2.3M, Marketing $450K
+
+Calculate growth rates, profit margins, and ROI on marketing spend.
+"""
+
+swarm_config = {
+    "name": "Financial Analysis Swarm",
+    "description": "Multi-agent financial data analysis",
+    "swarm_type": "SpreadSheetSwarm",
+    "task": financial_data,
+    "agents": [
+        {
+            "agent_name": "Revenue Analyst",
+            "description": "Analyzes revenue trends and growth",
+            "system_prompt": "You are a financial analyst specializing in revenue analysis. Calculate quarter-over-quarter growth rates, identify trends, and provide revenue forecasts. Present findings in a clear, tabular format.",
+            "model_name": "gpt-4o",
+            "max_loops": 1,
+            "temperature": 0.2
+        },
+        {
+            "agent_name": "Cost Analyst",
+            "description": "Analyzes expenses and cost efficiency",
+            "system_prompt": "You are a cost analyst specializing in expense management. Analyze expense ratios, identify cost trends, and calculate operational efficiency metrics. Present findings with clear calculations.",
+            "model_name": "gpt-4o",
+            "max_loops": 1,
+            "temperature": 0.2
+        },
+        {
+            "agent_name": "Marketing ROI Analyst",
+            "description": "Calculates marketing effectiveness",
+            "system_prompt": "You are a marketing analytics specialist. Calculate marketing ROI, customer acquisition costs, and marketing efficiency ratios. Correlate marketing spend with revenue growth.",
+            "model_name": "gpt-4o",
+            "max_loops": 1,
+            "temperature": 0.2
+        },
+        {
+            "agent_name": "Financial Synthesizer",
+            "description": "Combines analyses into executive summary",
+            "system_prompt": "You are a senior financial analyst. Synthesize the analyses from other team members into a comprehensive executive summary with key metrics, insights, and recommendations.",
+            "model_name": "gpt-4o",
+            "max_loops": 1,
+            "temperature": 0.3
+        }
+    ],
+    "max_loops": 1
+}
+
+response = requests.post(
+    f"{API_BASE_URL}/v1/swarm/completions",
+    headers=headers,
+    json=swarm_config
+)
+
+if response.status_code == 200:
+    result = response.json()
+    print("SpreadSheetSwarm analysis completed!")
+    print(f"Cost: ${result['metadata']['billing_info']['total_cost']}")
+    print("\n=== Analysis Results ===")
+    for output in result['output']:
+        print(f"\n--- {output['role']} ---")
+        print(output['content'])
+else:
+    print(f"Error: {response.status_code} - {response.text}")
+```
+</Tab>
+
+<Tab title="JavaScript (fetch)">
+```javascript
+const API_BASE_URL = "https://api.swarms.world";
+const API_KEY = "your_api_key_here";
+
+const headers = {
+    "x-api-key": API_KEY,
+    "Content-Type": "application/json"
+};
+
+const financialData = `
+Analyze the following quarterly financial data and provide insights:
+
+Q1: Revenue $2.5M, Expenses $1.8M, Marketing $300K
+Q2: Revenue $2.8M, Expenses $1.9M, Marketing $350K
+Q3: Revenue $3.2M, Expenses $2.1M, Marketing $400K
+Q4: Revenue $3.8M, Expenses $2.3M, Marketing $450K
+
+Calculate growth rates, profit margins, and ROI on marketing spend.
+`;
+
+const swarmConfig = {
+    name: "Financial Analysis Swarm",
+    description: "Multi-agent financial data analysis",
+    swarm_type: "SpreadSheetSwarm",
+    task: financialData,
+    agents: [
+        {
+            agent_name: "Revenue Analyst",
+            description: "Analyzes revenue trends and growth",
+            system_prompt: "You are a financial analyst specializing in revenue analysis. Calculate quarter-over-quarter growth rates, identify trends, and provide revenue forecasts.",
+            model_name: "gpt-4o",
+            max_loops: 1,
+            temperature: 0.2
+        },
+        {
+            agent_name: "Cost Analyst",
+            description: "Analyzes expenses and cost efficiency",
+            system_prompt: "You are a cost analyst specializing in expense management. Analyze expense ratios and calculate operational efficiency metrics.",
+            model_name: "gpt-4o",
+            max_loops: 1,
+            temperature: 0.2
+        },
+        {
+            agent_name: "Marketing ROI Analyst",
+            description: "Calculates marketing effectiveness",
+            system_prompt: "You are a marketing analytics specialist. Calculate marketing ROI and correlate marketing spend with revenue growth.",
+            model_name: "gpt-4o",
+            max_loops: 1,
+            temperature: 0.2
+        },
+        {
+            agent_name: "Financial Synthesizer",
+            description: "Combines analyses into executive summary",
+            system_prompt: "You are a senior financial analyst. Synthesize analyses into a comprehensive executive summary.",
+            model_name: "gpt-4o",
+            max_loops: 1,
+            temperature: 0.3
+        }
+    ],
+    max_loops: 1
+};
+
+fetch(`${API_BASE_URL}/v1/swarm/completions`, {
+    method: "POST",
+    headers: headers,
+    body: JSON.stringify(swarmConfig)
+})
+.then(response => response.json())
+.then(result => {
+    if (result.status === "success") {
+        console.log("SpreadSheetSwarm analysis completed!");
+        console.log(`Cost: $${result.metadata.billing_info.total_cost}`);
+        result.output.forEach(output => {
+            console.log(`\n--- ${output.role} ---`);
+            console.log(output.content);
+        });
+    }
+})
+.catch(error => console.error("Error:", error));
+```
+</Tab>
+
+<Tab title="Go">
+```go
+package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "fmt"
+    "io/ioutil"
+    "net/http"
+)
+
+type Agent struct {
+    AgentName    string  `json:"agent_name"`
+    Description  string  `json:"description"`
+    SystemPrompt string  `json:"system_prompt"`
+    ModelName    string  `json:"model_name"`
+    MaxLoops     int     `json:"max_loops"`
+    Temperature  float64 `json:"temperature"`
+}
+
+type SwarmConfig struct {
+    Name        string  `json:"name"`
+    Description string  `json:"description"`
+    SwarmType   string  `json:"swarm_type"`
+    Task        string  `json:"task"`
+    Agents      []Agent `json:"agents"`
+    MaxLoops    int     `json:"max_loops"`
+}
+
+func main() {
+    API_BASE_URL := "https://api.swarms.world"
+    API_KEY := "your_api_key_here"
+
+    financialData := `Analyze the following quarterly financial data:
+Q1: Revenue $2.5M, Expenses $1.8M, Marketing $300K
+Q2: Revenue $2.8M, Expenses $1.9M, Marketing $350K
+Q3: Revenue $3.2M, Expenses $2.1M, Marketing $400K
+Q4: Revenue $3.8M, Expenses $2.3M, Marketing $450K
+Calculate growth rates, profit margins, and ROI on marketing spend.`
+
+    swarmConfig := SwarmConfig{
+        Name:        "Financial Analysis Swarm",
+        Description: "Multi-agent financial data analysis",
+        SwarmType:   "SpreadSheetSwarm",
+        Task:        financialData,
+        Agents: []Agent{
+            {
+                AgentName:    "Revenue Analyst",
+                Description:  "Analyzes revenue trends and growth",
+                SystemPrompt: "You are a financial analyst specializing in revenue analysis.",
+                ModelName:    "gpt-4o",
+                MaxLoops:     1,
+                Temperature:  0.2,
+            },
+            {
+                AgentName:    "Cost Analyst",
+                Description:  "Analyzes expenses and cost efficiency",
+                SystemPrompt: "You are a cost analyst specializing in expense management.",
+                ModelName:    "gpt-4o",
+                MaxLoops:     1,
+                Temperature:  0.2,
+            },
+            {
+                AgentName:    "Marketing ROI Analyst",
+                Description:  "Calculates marketing effectiveness",
+                SystemPrompt: "You are a marketing analytics specialist.",
+                ModelName:    "gpt-4o",
+                MaxLoops:     1,
+                Temperature:  0.2,
+            },
+            {
+                AgentName:    "Financial Synthesizer",
+                Description:  "Combines analyses into executive summary",
+                SystemPrompt: "You are a senior financial analyst.",
+                ModelName:    "gpt-4o",
+                MaxLoops:     1,
+                Temperature:  0.3,
+            },
+        },
+        MaxLoops: 1,
+    }
+
+    jsonData, _ := json.Marshal(swarmConfig)
+
+    req, _ := http.NewRequest("POST", API_BASE_URL+"/v1/swarm/completions", bytes.NewBuffer(jsonData))
+    req.Header.Set("x-api-key", API_KEY)
+    req.Header.Set("Content-Type", "application/json")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Printf("Error: %v\n", err)
+        return
+    }
+    defer resp.Body.Close()
+
+    body, _ := ioutil.ReadAll(resp.Body)
+    fmt.Printf("Response: %s\n", string(body))
+}
+```
+</Tab>
+
+<Tab title="Rust">
+```rust
+use reqwest::Client;
+use serde_json::{json, Value};
+use std::error::Error;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn Error>> {
+    let api_base_url = "https://api.swarms.world";
+    let api_key = "your_api_key_here";
+
+    let financial_data = r#"
+Analyze the following quarterly financial data:
+Q1: Revenue $2.5M, Expenses $1.8M, Marketing $300K
+Q2: Revenue $2.8M, Expenses $1.9M, Marketing $350K
+Q3: Revenue $3.2M, Expenses $2.1M, Marketing $400K
+Q4: Revenue $3.8M, Expenses $2.3M, Marketing $450K
+Calculate growth rates, profit margins, and ROI on marketing spend.
+"#;
+
+    let swarm_config = json!({
+        "name": "Financial Analysis Swarm",
+        "description": "Multi-agent financial data analysis",
+        "swarm_type": "SpreadSheetSwarm",
+        "task": financial_data,
+        "agents": [
+            {
+                "agent_name": "Revenue Analyst",
+                "description": "Analyzes revenue trends and growth",
+                "system_prompt": "You are a financial analyst specializing in revenue analysis.",
+                "model_name": "gpt-4o",
+                "max_loops": 1,
+                "temperature": 0.2
+            },
+            {
+                "agent_name": "Cost Analyst",
+                "description": "Analyzes expenses and cost efficiency",
+                "system_prompt": "You are a cost analyst specializing in expense management.",
+                "model_name": "gpt-4o",
+                "max_loops": 1,
+                "temperature": 0.2
+            },
+            {
+                "agent_name": "Marketing ROI Analyst",
+                "description": "Calculates marketing effectiveness",
+                "system_prompt": "You are a marketing analytics specialist.",
+                "model_name": "gpt-4o",
+                "max_loops": 1,
+                "temperature": 0.2
+            },
+            {
+                "agent_name": "Financial Synthesizer",
+                "description": "Combines analyses into executive summary",
+                "system_prompt": "You are a senior financial analyst.",
+                "model_name": "gpt-4o",
+                "max_loops": 1,
+                "temperature": 0.3
+            }
+        ],
+        "max_loops": 1
+    });
+
+    let client = Client::new();
+    let response = client
+        .post(&format!("{}/v1/swarm/completions", api_base_url))
+        .header("x-api-key", api_key)
+        .header("Content-Type", "application/json")
+        .json(&swarm_config)
+        .send()
+        .await?;
+
+    if response.status().is_success() {
+        let result: Value = response.json().await?;
+        println!("SpreadSheetSwarm completed!");
+        println!("Response: {:?}", result);
+    } else {
+        println!("Error: {}", response.status());
+    }
+
+    Ok(())
+}
+```
+</Tab>
+</Tabs>
+
+**Example Response**:
+```json
+{
+    "job_id": "swarms-SS17nZFDesmLHxCRoeyF3NVYvPaXk",
+    "status": "success",
+    "swarm_name": "Financial Analysis Swarm",
+    "description": "Multi-agent financial data analysis",
+    "swarm_type": "SpreadSheetSwarm",
+    "output": [
+        {
+            "role": "Revenue Analyst",
+            "content": "## Revenue Analysis\n\n| Quarter | Revenue | QoQ Growth | YTD |\n|---------|---------|------------|-----|\n| Q1 | $2.5M | - | $2.5M |\n| Q2 | $2.8M | +12.0% | $5.3M |\n| Q3 | $3.2M | +14.3% | $8.5M |\n| Q4 | $3.8M | +18.8% | $12.3M |\n\n**Key Findings:**\n- Annual revenue: $12.3M\n- Average quarterly growth: 15.0%\n- Accelerating growth trend observed..."
+        },
+        {
+            "role": "Cost Analyst",
+            "content": "## Cost Analysis\n\n| Quarter | Expenses | Expense Ratio | Profit Margin |\n|---------|----------|---------------|---------------|\n| Q1 | $1.8M | 72.0% | 28.0% |\n| Q2 | $1.9M | 67.9% | 32.1% |\n| Q3 | $2.1M | 65.6% | 34.4% |\n| Q4 | $2.3M | 60.5% | 39.5% |\n\n**Key Findings:**\n- Improving operational efficiency\n- Profit margin improved by 11.5 percentage points..."
+        },
+        {
+            "role": "Marketing ROI Analyst",
+            "content": "## Marketing ROI Analysis\n\n| Quarter | Marketing | Revenue | ROI |\n|---------|-----------|---------|-----|\n| Q1 | $300K | $2.5M | 733% |\n| Q2 | $350K | $2.8M | 700% |\n| Q3 | $400K | $3.2M | 700% |\n| Q4 | $450K | $3.8M | 744% |\n\n**Key Findings:**\n- Average Marketing ROI: 719%\n- Marketing spend as % of revenue: 12.2%..."
+        },
+        {
+            "role": "Financial Synthesizer",
+            "content": "## Executive Summary\n\n### Key Metrics\n- **Annual Revenue:** $12.3M (+52% annual growth)\n- **Annual Profit:** $4.2M (34.1% margin)\n- **Marketing ROI:** 719% average\n\n### Recommendations\n1. Increase marketing budget given strong ROI\n2. Maintain cost discipline as margins improve\n3. Project Q1 next year: $4.2M revenue..."
+        }
+    ],
+    "number_of_agents": 4,
+    "service_tier": "standard",
+    "execution_time": 28.5,
+    "usage": {
+        "input_tokens": 200,
+        "output_tokens": 3600,
+        "total_tokens": 3800,
+        "billing_info": {
+            "cost_breakdown": {
+                "agent_cost": 0.04,
+                "input_token_cost": 0.0006,
+                "output_token_cost": 0.054,
+                "num_agents": 4,
+                "service_tier": "standard"
+            },
+            "total_cost": 0.0946
+        }
+    }
+}
+```
+
+## Best Practices
+
+- Use low temperature (0.1-0.3) for accurate numerical calculations
+- Design agents with specific analytical focuses for comprehensive coverage
+- Include a synthesizer agent to combine individual analyses
+- Structure data clearly in the task description
+- For large datasets, consider breaking into smaller batches
+- Use consistent data formats to enable cross-agent analysis
+

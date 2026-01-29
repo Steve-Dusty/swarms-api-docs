@@ -1,0 +1,449 @@
+---
+name: "DebateWithJudge"
+description: "Structured debate swarm where agents argue opposing positions while a judge agent evaluates arguments and determines the winner"
+---
+
+**Swarm Type**: `DebateWithJudge`
+
+## Overview
+
+The DebateWithJudge swarm type implements a structured debate format where multiple agents present and defend opposing viewpoints on a topic, while a designated judge agent evaluates the arguments and determines the most compelling position. This architecture is ideal for exploring complex topics, stress-testing ideas, and arriving at well-reasoned conclusions through adversarial analysis.
+
+Key features:
+- **Structured Argumentation**: Agents present formal arguments for their positions
+- **Adversarial Analysis**: Opposing viewpoints challenge assumptions
+- **Impartial Evaluation**: Judge agent weighs evidence objectively
+- **Transparent Reasoning**: Clear rationale for final decisions
+
+## Use Cases
+
+- Policy analysis and decision-making
+- Technical architecture reviews
+- Investment thesis validation
+- Risk assessment with multiple perspectives
+- Academic and research debates
+- Legal argument evaluation
+
+## API Usage
+
+### Basic DebateWithJudge Example
+
+<Tabs>
+<Tab title="Shell (curl)">
+```bash
+curl -X POST "https://api.swarms.world/v1/swarm/completions" \
+  -H "x-api-key: $SWARMS_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Technology Strategy Debate",
+    "description": "Structured debate on build vs buy decision",
+    "swarm_type": "DebateWithJudge",
+    "task": "Should our company build a custom AI solution in-house or purchase an existing enterprise AI platform? Consider costs, time-to-market, customization, maintenance, and competitive advantage.",
+    "agents": [
+      {
+        "agent_name": "Build Advocate",
+        "description": "Argues for building custom solution",
+        "system_prompt": "You are a technology strategist advocating for building custom solutions. Present compelling arguments for why building in-house is the better choice. Support your position with concrete benefits, examples, and address potential counterarguments.",
+        "model_name": "gpt-4o",
+        "role": "debater",
+        "max_loops": 1,
+        "temperature": 0.6
+      },
+      {
+        "agent_name": "Buy Advocate",
+        "description": "Argues for purchasing existing platform",
+        "system_prompt": "You are a technology strategist advocating for buying existing solutions. Present compelling arguments for why purchasing an enterprise platform is the better choice. Support your position with concrete benefits, examples, and address potential counterarguments.",
+        "model_name": "gpt-4o",
+        "role": "debater",
+        "max_loops": 1,
+        "temperature": 0.6
+      },
+      {
+        "agent_name": "CTO Judge",
+        "description": "Evaluates arguments and decides winner",
+        "system_prompt": "You are the CTO acting as an impartial judge. Listen to both sides of the debate, evaluate the strength of their arguments, identify logical flaws or unsupported claims, and provide a reasoned verdict. Consider the specific context of the company and weigh practical implications.",
+        "model_name": "gpt-4o",
+        "role": "judge",
+        "max_loops": 1,
+        "temperature": 0.3
+      }
+    ],
+    "max_loops": 2
+  }'
+```
+</Tab>
+
+<Tab title="Python (requests)">
+```python
+import requests
+import json
+
+API_BASE_URL = "https://api.swarms.world"
+API_KEY = "your_api_key_here"
+
+headers = {
+    "x-api-key": API_KEY,
+    "Content-Type": "application/json"
+}
+
+swarm_config = {
+    "name": "Technology Strategy Debate",
+    "description": "Structured debate on build vs buy decision",
+    "swarm_type": "DebateWithJudge",
+    "task": "Should our company build a custom AI solution in-house or purchase an existing enterprise AI platform? Consider costs, time-to-market, customization, maintenance, and competitive advantage.",
+    "agents": [
+        {
+            "agent_name": "Build Advocate",
+            "description": "Argues for building custom solution",
+            "system_prompt": "You are a technology strategist advocating for building custom solutions. Present compelling arguments for why building in-house is the better choice. Support your position with concrete benefits, examples, and address potential counterarguments.",
+            "model_name": "gpt-4o",
+            "role": "debater",
+            "max_loops": 1,
+            "temperature": 0.6
+        },
+        {
+            "agent_name": "Buy Advocate",
+            "description": "Argues for purchasing existing platform",
+            "system_prompt": "You are a technology strategist advocating for buying existing solutions. Present compelling arguments for why purchasing an enterprise platform is the better choice. Support your position with concrete benefits, examples, and address potential counterarguments.",
+            "model_name": "gpt-4o",
+            "role": "debater",
+            "max_loops": 1,
+            "temperature": 0.6
+        },
+        {
+            "agent_name": "CTO Judge",
+            "description": "Evaluates arguments and decides winner",
+            "system_prompt": "You are the CTO acting as an impartial judge. Listen to both sides of the debate, evaluate the strength of their arguments, identify logical flaws or unsupported claims, and provide a reasoned verdict.",
+            "model_name": "gpt-4o",
+            "role": "judge",
+            "max_loops": 1,
+            "temperature": 0.3
+        }
+    ],
+    "max_loops": 2
+}
+
+response = requests.post(
+    f"{API_BASE_URL}/v1/swarm/completions",
+    headers=headers,
+    json=swarm_config
+)
+
+if response.status_code == 200:
+    result = response.json()
+    print("DebateWithJudge completed successfully!")
+    print(f"Cost: ${result['metadata']['billing_info']['total_cost']}")
+
+    # Print debate rounds
+    for round_data in result['output']['rounds']:
+        print(f"\n=== Round {round_data['round']} ===")
+        for argument in round_data['arguments']:
+            print(f"\n{argument['agent']}: {argument['content'][:500]}...")
+
+    # Print verdict
+    print(f"\n=== VERDICT ===")
+    print(result['output']['verdict'])
+else:
+    print(f"Error: {response.status_code} - {response.text}")
+```
+</Tab>
+
+<Tab title="JavaScript (fetch)">
+```javascript
+const API_BASE_URL = "https://api.swarms.world";
+const API_KEY = "your_api_key_here";
+
+const headers = {
+    "x-api-key": API_KEY,
+    "Content-Type": "application/json"
+};
+
+const swarmConfig = {
+    name: "Technology Strategy Debate",
+    description: "Structured debate on build vs buy decision",
+    swarm_type: "DebateWithJudge",
+    task: "Should our company build a custom AI solution in-house or purchase an existing enterprise AI platform?",
+    agents: [
+        {
+            agent_name: "Build Advocate",
+            description: "Argues for building custom solution",
+            system_prompt: "You are a technology strategist advocating for building custom solutions. Present compelling arguments for why building in-house is the better choice.",
+            model_name: "gpt-4o",
+            role: "debater",
+            max_loops: 1,
+            temperature: 0.6
+        },
+        {
+            agent_name: "Buy Advocate",
+            description: "Argues for purchasing existing platform",
+            system_prompt: "You are a technology strategist advocating for buying existing solutions. Present compelling arguments for why purchasing an enterprise platform is the better choice.",
+            model_name: "gpt-4o",
+            role: "debater",
+            max_loops: 1,
+            temperature: 0.6
+        },
+        {
+            agent_name: "CTO Judge",
+            description: "Evaluates arguments and decides winner",
+            system_prompt: "You are the CTO acting as an impartial judge. Evaluate arguments and provide a reasoned verdict.",
+            model_name: "gpt-4o",
+            role: "judge",
+            max_loops: 1,
+            temperature: 0.3
+        }
+    ],
+    max_loops: 2
+};
+
+fetch(`${API_BASE_URL}/v1/swarm/completions`, {
+    method: "POST",
+    headers: headers,
+    body: JSON.stringify(swarmConfig)
+})
+.then(response => response.json())
+.then(result => {
+    if (result.status === "success") {
+        console.log("DebateWithJudge completed!");
+        console.log("Verdict:", result.output.verdict);
+    }
+})
+.catch(error => console.error("Error:", error));
+```
+</Tab>
+
+<Tab title="Go">
+```go
+package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "fmt"
+    "io/ioutil"
+    "net/http"
+)
+
+type Agent struct {
+    AgentName    string  `json:"agent_name"`
+    Description  string  `json:"description"`
+    SystemPrompt string  `json:"system_prompt"`
+    ModelName    string  `json:"model_name"`
+    Role         string  `json:"role"`
+    MaxLoops     int     `json:"max_loops"`
+    Temperature  float64 `json:"temperature"`
+}
+
+type SwarmConfig struct {
+    Name        string  `json:"name"`
+    Description string  `json:"description"`
+    SwarmType   string  `json:"swarm_type"`
+    Task        string  `json:"task"`
+    Agents      []Agent `json:"agents"`
+    MaxLoops    int     `json:"max_loops"`
+}
+
+func main() {
+    API_BASE_URL := "https://api.swarms.world"
+    API_KEY := "your_api_key_here"
+
+    swarmConfig := SwarmConfig{
+        Name:        "Technology Strategy Debate",
+        Description: "Structured debate on build vs buy decision",
+        SwarmType:   "DebateWithJudge",
+        Task:        "Should we build or buy an AI solution?",
+        Agents: []Agent{
+            {
+                AgentName:    "Build Advocate",
+                Description:  "Argues for building custom solution",
+                SystemPrompt: "You advocate for building custom solutions.",
+                ModelName:    "gpt-4o",
+                Role:         "debater",
+                MaxLoops:     1,
+                Temperature:  0.6,
+            },
+            {
+                AgentName:    "Buy Advocate",
+                Description:  "Argues for purchasing existing platform",
+                SystemPrompt: "You advocate for buying existing solutions.",
+                ModelName:    "gpt-4o",
+                Role:         "debater",
+                MaxLoops:     1,
+                Temperature:  0.6,
+            },
+            {
+                AgentName:    "CTO Judge",
+                Description:  "Evaluates arguments and decides winner",
+                SystemPrompt: "You are the impartial judge.",
+                ModelName:    "gpt-4o",
+                Role:         "judge",
+                MaxLoops:     1,
+                Temperature:  0.3,
+            },
+        },
+        MaxLoops: 2,
+    }
+
+    jsonData, _ := json.Marshal(swarmConfig)
+
+    req, _ := http.NewRequest("POST", API_BASE_URL+"/v1/swarm/completions", bytes.NewBuffer(jsonData))
+    req.Header.Set("x-api-key", API_KEY)
+    req.Header.Set("Content-Type", "application/json")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Printf("Error: %v\n", err)
+        return
+    }
+    defer resp.Body.Close()
+
+    body, _ := ioutil.ReadAll(resp.Body)
+    fmt.Printf("Response: %s\n", string(body))
+}
+```
+</Tab>
+
+<Tab title="Rust">
+```rust
+use reqwest::Client;
+use serde_json::{json, Value};
+use std::error::Error;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn Error>> {
+    let api_base_url = "https://api.swarms.world";
+    let api_key = "your_api_key_here";
+
+    let swarm_config = json!({
+        "name": "Technology Strategy Debate",
+        "description": "Structured debate on build vs buy decision",
+        "swarm_type": "DebateWithJudge",
+        "task": "Should we build or buy an AI solution?",
+        "agents": [
+            {
+                "agent_name": "Build Advocate",
+                "description": "Argues for building custom solution",
+                "system_prompt": "You advocate for building custom solutions.",
+                "model_name": "gpt-4o",
+                "role": "debater",
+                "max_loops": 1,
+                "temperature": 0.6
+            },
+            {
+                "agent_name": "Buy Advocate",
+                "description": "Argues for purchasing existing platform",
+                "system_prompt": "You advocate for buying existing solutions.",
+                "model_name": "gpt-4o",
+                "role": "debater",
+                "max_loops": 1,
+                "temperature": 0.6
+            },
+            {
+                "agent_name": "CTO Judge",
+                "description": "Evaluates arguments and decides winner",
+                "system_prompt": "You are the impartial judge.",
+                "model_name": "gpt-4o",
+                "role": "judge",
+                "max_loops": 1,
+                "temperature": 0.3
+            }
+        ],
+        "max_loops": 2
+    });
+
+    let client = Client::new();
+    let response = client
+        .post(&format!("{}/v1/swarm/completions", api_base_url))
+        .header("x-api-key", api_key)
+        .header("Content-Type", "application/json")
+        .json(&swarm_config)
+        .send()
+        .await?;
+
+    if response.status().is_success() {
+        let result: Value = response.json().await?;
+        println!("DebateWithJudge completed!");
+        println!("Response: {:?}", result);
+    } else {
+        println!("Error: {}", response.status());
+    }
+
+    Ok(())
+}
+```
+</Tab>
+</Tabs>
+
+**Example Response**:
+```json
+{
+    "job_id": "swarms-DJ17nZFDesmLHxCRoeyF3NVYvPaXk",
+    "status": "success",
+    "swarm_name": "Technology Strategy Debate",
+    "description": "Structured debate on build vs buy decision",
+    "swarm_type": "DebateWithJudge",
+    "output": {
+        "rounds": [
+            {
+                "round": 1,
+                "arguments": [
+                    {
+                        "agent": "Build Advocate",
+                        "position": "BUILD",
+                        "content": "Building a custom AI solution offers several critical advantages:\n\n1. **Competitive Differentiation**: A custom solution can be tailored to our unique business processes, creating a moat that competitors using off-the-shelf solutions cannot replicate...\n\n2. **Full Control**: We maintain complete control over the technology stack, data handling, and future development direction..."
+                    },
+                    {
+                        "agent": "Buy Advocate",
+                        "position": "BUY",
+                        "content": "Purchasing an enterprise AI platform is the strategically sound choice:\n\n1. **Time-to-Market**: Enterprise platforms are production-ready. Building from scratch could take 12-18 months, while we can deploy an existing solution in weeks...\n\n2. **Proven Reliability**: Enterprise platforms have been battle-tested across thousands of deployments..."
+                    }
+                ]
+            },
+            {
+                "round": 2,
+                "arguments": [
+                    {
+                        "agent": "Build Advocate",
+                        "rebuttal": "While time-to-market is valid, the 'quick deployment' often leads to expensive customization projects later. Studies show 60% of enterprise AI implementations require significant modifications..."
+                    },
+                    {
+                        "agent": "Buy Advocate",
+                        "rebuttal": "The competitive differentiation argument assumes we have the talent to build world-class AI. In reality, top AI talent is scarce and expensive. Enterprise platforms give us access to teams of hundreds of AI engineers..."
+                    }
+                ]
+            }
+        ],
+        "verdict": {
+            "winner": "Buy Advocate",
+            "confidence": "moderate",
+            "reasoning": "After careful evaluation of both positions, I find the Buy Advocate's arguments more compelling for our current situation. Key factors:\n\n1. **Resource Reality**: We lack the specialized AI talent to build a competitive solution in-house\n2. **Opportunity Cost**: 12-18 months of development time has significant business impact\n3. **Risk Profile**: Enterprise platforms offer lower execution risk\n\nHowever, I recommend a hybrid approach: purchase a platform now, but invest in building internal AI capabilities for future strategic differentiators.",
+            "score": {
+                "Build Advocate": 7.5,
+                "Buy Advocate": 8.2
+            }
+        }
+    },
+    "number_of_agents": 3,
+    "debate_rounds": 2,
+    "service_tier": "standard",
+    "execution_time": 42.6,
+    "usage": {
+        "input_tokens": 180,
+        "output_tokens": 4800,
+        "total_tokens": 4980,
+        "billing_info": {
+            "total_cost": 0.11234
+        }
+    }
+}
+```
+
+## Best Practices
+
+- Assign clear, opposing positions to debater agents
+- Use a lower temperature (0.2-0.4) for the judge to ensure consistent evaluation
+- Set `max_loops` to 2 or more to allow for rebuttals
+- Include specific evaluation criteria in the judge's system prompt
+- Design debaters with comparable expertise levels for balanced arguments
+- Use the `role` parameter to distinguish debaters from the judge
+

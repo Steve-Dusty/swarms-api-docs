@@ -1,0 +1,463 @@
+---
+name: "Auto"
+description: "Automatic swarm type selection that intelligently chooses the optimal architecture based on your task"
+---
+
+**Swarm Type**: `auto`
+
+## Overview
+
+The `auto` swarm type provides intelligent, automatic selection of the optimal swarm architecture based on your task description and requirements. Instead of manually choosing between SequentialWorkflow, ConcurrentWorkflow, MixtureOfAgents, or other architectures, the system analyzes your task and selects the most appropriate swarm type automatically.
+
+Key features:
+- **Intelligent Selection**: Analyzes task to determine optimal architecture
+- **Zero Configuration**: Just describe your task and let the system decide
+- **Adaptive**: Considers task complexity, agent requirements, and workflow patterns
+- **Beginner-Friendly**: Perfect for users new to multi-agent systems
+
+## Use Cases
+
+- Users unfamiliar with swarm architecture selection
+- Rapid prototyping and experimentation
+- Tasks with unclear workflow requirements
+- General-purpose multi-agent applications
+- Exploratory analysis and research
+
+## API Usage
+
+### Basic Auto Example
+
+<Tabs>
+<Tab title="Shell (curl)">
+```bash
+curl -X POST "https://api.swarms.world/v1/swarm/completions" \
+  -H "x-api-key: $SWARMS_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Auto-Selected Analysis",
+    "description": "Let the system choose the best swarm architecture",
+    "swarm_type": "auto",
+    "task": "Create a comprehensive business plan for a new mobile app startup, including market analysis, financial projections, marketing strategy, and technical architecture",
+    "agents": [
+      {
+        "agent_name": "Market Analyst",
+        "description": "Analyzes market trends and competition",
+        "system_prompt": "You are a market research analyst. Analyze market opportunities, competitive landscape, and target demographics.",
+        "model_name": "gpt-4o",
+        "max_loops": 1,
+        "temperature": 0.4
+      },
+      {
+        "agent_name": "Financial Planner",
+        "description": "Creates financial projections and models",
+        "system_prompt": "You are a financial analyst. Create revenue projections, cost estimates, and funding requirements.",
+        "model_name": "gpt-4o",
+        "max_loops": 1,
+        "temperature": 0.3
+      },
+      {
+        "agent_name": "Marketing Strategist",
+        "description": "Develops marketing and growth strategies",
+        "system_prompt": "You are a marketing strategist. Develop go-to-market strategy, user acquisition channels, and brand positioning.",
+        "model_name": "gpt-4o",
+        "max_loops": 1,
+        "temperature": 0.5
+      },
+      {
+        "agent_name": "Technical Architect",
+        "description": "Designs technical infrastructure",
+        "system_prompt": "You are a technical architect. Design the app architecture, technology stack, and development roadmap.",
+        "model_name": "gpt-4o",
+        "max_loops": 1,
+        "temperature": 0.3
+      }
+    ],
+    "max_loops": 1
+  }'
+```
+</Tab>
+
+<Tab title="Python (requests)">
+```python
+import requests
+import json
+
+API_BASE_URL = "https://api.swarms.world"
+API_KEY = "your_api_key_here"
+
+headers = {
+    "x-api-key": API_KEY,
+    "Content-Type": "application/json"
+}
+
+swarm_config = {
+    "name": "Auto-Selected Analysis",
+    "description": "Let the system choose the best swarm architecture",
+    "swarm_type": "auto",
+    "task": "Create a comprehensive business plan for a new mobile app startup, including market analysis, financial projections, marketing strategy, and technical architecture",
+    "agents": [
+        {
+            "agent_name": "Market Analyst",
+            "description": "Analyzes market trends and competition",
+            "system_prompt": "You are a market research analyst. Analyze market opportunities, competitive landscape, and target demographics.",
+            "model_name": "gpt-4o",
+            "max_loops": 1,
+            "temperature": 0.4
+        },
+        {
+            "agent_name": "Financial Planner",
+            "description": "Creates financial projections and models",
+            "system_prompt": "You are a financial analyst. Create revenue projections, cost estimates, and funding requirements.",
+            "model_name": "gpt-4o",
+            "max_loops": 1,
+            "temperature": 0.3
+        },
+        {
+            "agent_name": "Marketing Strategist",
+            "description": "Develops marketing and growth strategies",
+            "system_prompt": "You are a marketing strategist. Develop go-to-market strategy, user acquisition channels, and brand positioning.",
+            "model_name": "gpt-4o",
+            "max_loops": 1,
+            "temperature": 0.5
+        },
+        {
+            "agent_name": "Technical Architect",
+            "description": "Designs technical infrastructure",
+            "system_prompt": "You are a technical architect. Design the app architecture, technology stack, and development roadmap.",
+            "model_name": "gpt-4o",
+            "max_loops": 1,
+            "temperature": 0.3
+        }
+    ],
+    "max_loops": 1
+}
+
+response = requests.post(
+    f"{API_BASE_URL}/v1/swarm/completions",
+    headers=headers,
+    json=swarm_config
+)
+
+if response.status_code == 200:
+    result = response.json()
+    print("Auto swarm completed successfully!")
+    print(f"Selected architecture: {result.get('selected_swarm_type', 'N/A')}")
+    print(f"Cost: ${result['metadata']['billing_info']['total_cost']}")
+    print(f"Results: {result['output']}")
+else:
+    print(f"Error: {response.status_code} - {response.text}")
+```
+</Tab>
+
+<Tab title="JavaScript (fetch)">
+```javascript
+const API_BASE_URL = "https://api.swarms.world";
+const API_KEY = "your_api_key_here";
+
+const headers = {
+    "x-api-key": API_KEY,
+    "Content-Type": "application/json"
+};
+
+const swarmConfig = {
+    name: "Auto-Selected Analysis",
+    description: "Let the system choose the best swarm architecture",
+    swarm_type: "auto",
+    task: "Create a comprehensive business plan for a new mobile app startup, including market analysis, financial projections, marketing strategy, and technical architecture",
+    agents: [
+        {
+            agent_name: "Market Analyst",
+            description: "Analyzes market trends and competition",
+            system_prompt: "You are a market research analyst. Analyze market opportunities, competitive landscape, and target demographics.",
+            model_name: "gpt-4o",
+            max_loops: 1,
+            temperature: 0.4
+        },
+        {
+            agent_name: "Financial Planner",
+            description: "Creates financial projections and models",
+            system_prompt: "You are a financial analyst. Create revenue projections, cost estimates, and funding requirements.",
+            model_name: "gpt-4o",
+            max_loops: 1,
+            temperature: 0.3
+        },
+        {
+            agent_name: "Marketing Strategist",
+            description: "Develops marketing and growth strategies",
+            system_prompt: "You are a marketing strategist. Develop go-to-market strategy, user acquisition channels, and brand positioning.",
+            model_name: "gpt-4o",
+            max_loops: 1,
+            temperature: 0.5
+        },
+        {
+            agent_name: "Technical Architect",
+            description: "Designs technical infrastructure",
+            system_prompt: "You are a technical architect. Design the app architecture, technology stack, and development roadmap.",
+            model_name: "gpt-4o",
+            max_loops: 1,
+            temperature: 0.3
+        }
+    ],
+    max_loops: 1
+};
+
+fetch(`${API_BASE_URL}/v1/swarm/completions`, {
+    method: "POST",
+    headers: headers,
+    body: JSON.stringify(swarmConfig)
+})
+.then(response => response.json())
+.then(result => {
+    if (result.status === "success") {
+        console.log("Auto swarm completed successfully!");
+        console.log(`Selected architecture: ${result.selected_swarm_type || 'N/A'}`);
+        console.log(`Cost: $${result.metadata.billing_info.total_cost}`);
+        console.log("Results:", result.output);
+    }
+})
+.catch(error => console.error("Error:", error));
+```
+</Tab>
+
+<Tab title="Go">
+```go
+package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "fmt"
+    "io/ioutil"
+    "net/http"
+)
+
+type Agent struct {
+    AgentName    string  `json:"agent_name"`
+    Description  string  `json:"description"`
+    SystemPrompt string  `json:"system_prompt"`
+    ModelName    string  `json:"model_name"`
+    MaxLoops     int     `json:"max_loops"`
+    Temperature  float64 `json:"temperature"`
+}
+
+type SwarmConfig struct {
+    Name        string  `json:"name"`
+    Description string  `json:"description"`
+    SwarmType   string  `json:"swarm_type"`
+    Task        string  `json:"task"`
+    Agents      []Agent `json:"agents"`
+    MaxLoops    int     `json:"max_loops"`
+}
+
+func main() {
+    API_BASE_URL := "https://api.swarms.world"
+    API_KEY := "your_api_key_here"
+
+    swarmConfig := SwarmConfig{
+        Name:        "Auto-Selected Analysis",
+        Description: "Let the system choose the best swarm architecture",
+        SwarmType:   "auto",
+        Task:        "Create a comprehensive business plan for a new mobile app startup",
+        Agents: []Agent{
+            {
+                AgentName:    "Market Analyst",
+                Description:  "Analyzes market trends and competition",
+                SystemPrompt: "You are a market research analyst.",
+                ModelName:    "gpt-4o",
+                MaxLoops:     1,
+                Temperature:  0.4,
+            },
+            {
+                AgentName:    "Financial Planner",
+                Description:  "Creates financial projections and models",
+                SystemPrompt: "You are a financial analyst.",
+                ModelName:    "gpt-4o",
+                MaxLoops:     1,
+                Temperature:  0.3,
+            },
+            {
+                AgentName:    "Marketing Strategist",
+                Description:  "Develops marketing and growth strategies",
+                SystemPrompt: "You are a marketing strategist.",
+                ModelName:    "gpt-4o",
+                MaxLoops:     1,
+                Temperature:  0.5,
+            },
+            {
+                AgentName:    "Technical Architect",
+                Description:  "Designs technical infrastructure",
+                SystemPrompt: "You are a technical architect.",
+                ModelName:    "gpt-4o",
+                MaxLoops:     1,
+                Temperature:  0.3,
+            },
+        },
+        MaxLoops: 1,
+    }
+
+    jsonData, _ := json.Marshal(swarmConfig)
+
+    req, _ := http.NewRequest("POST", API_BASE_URL+"/v1/swarm/completions", bytes.NewBuffer(jsonData))
+    req.Header.Set("x-api-key", API_KEY)
+    req.Header.Set("Content-Type", "application/json")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Printf("Error: %v\n", err)
+        return
+    }
+    defer resp.Body.Close()
+
+    body, _ := ioutil.ReadAll(resp.Body)
+    fmt.Printf("Response: %s\n", string(body))
+}
+```
+</Tab>
+
+<Tab title="Rust">
+```rust
+use reqwest::Client;
+use serde_json::{json, Value};
+use std::error::Error;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn Error>> {
+    let api_base_url = "https://api.swarms.world";
+    let api_key = "your_api_key_here";
+
+    let swarm_config = json!({
+        "name": "Auto-Selected Analysis",
+        "description": "Let the system choose the best swarm architecture",
+        "swarm_type": "auto",
+        "task": "Create a comprehensive business plan for a new mobile app startup, including market analysis, financial projections, marketing strategy, and technical architecture",
+        "agents": [
+            {
+                "agent_name": "Market Analyst",
+                "description": "Analyzes market trends and competition",
+                "system_prompt": "You are a market research analyst.",
+                "model_name": "gpt-4o",
+                "max_loops": 1,
+                "temperature": 0.4
+            },
+            {
+                "agent_name": "Financial Planner",
+                "description": "Creates financial projections and models",
+                "system_prompt": "You are a financial analyst.",
+                "model_name": "gpt-4o",
+                "max_loops": 1,
+                "temperature": 0.3
+            },
+            {
+                "agent_name": "Marketing Strategist",
+                "description": "Develops marketing and growth strategies",
+                "system_prompt": "You are a marketing strategist.",
+                "model_name": "gpt-4o",
+                "max_loops": 1,
+                "temperature": 0.5
+            },
+            {
+                "agent_name": "Technical Architect",
+                "description": "Designs technical infrastructure",
+                "system_prompt": "You are a technical architect.",
+                "model_name": "gpt-4o",
+                "max_loops": 1,
+                "temperature": 0.3
+            }
+        ],
+        "max_loops": 1
+    });
+
+    let client = Client::new();
+    let response = client
+        .post(&format!("{}/v1/swarm/completions", api_base_url))
+        .header("x-api-key", api_key)
+        .header("Content-Type", "application/json")
+        .json(&swarm_config)
+        .send()
+        .await?;
+
+    if response.status().is_success() {
+        let result: Value = response.json().await?;
+        println!("Auto swarm completed successfully!");
+        println!("Response: {:?}", result);
+    } else {
+        println!("Error: {}", response.status());
+    }
+
+    Ok(())
+}
+```
+</Tab>
+</Tabs>
+
+**Example Response**:
+```json
+{
+    "job_id": "swarms-AU17nZFDesmLHxCRoeyF3NVYvPaXk",
+    "status": "success",
+    "swarm_name": "Auto-Selected Analysis",
+    "description": "Let the system choose the best swarm architecture",
+    "swarm_type": "auto",
+    "selected_swarm_type": "MixtureOfAgents",
+    "selection_reason": "Task requires comprehensive analysis from multiple specialized perspectives that should be combined into a unified output",
+    "output": [
+        {
+            "role": "Market Analyst",
+            "content": "## Market Analysis\n\nThe mobile app market is projected to reach $935 billion by 2025...\n\n### Competitive Landscape\n- Major players: TikTok, Instagram, Snapchat\n- Market gaps identified in productivity-social integration..."
+        },
+        {
+            "role": "Financial Planner",
+            "content": "## Financial Projections\n\n### Year 1\n- Development costs: $500K\n- Marketing budget: $200K\n- Projected revenue: $150K\n\n### Break-even Analysis\n- Expected break-even: Month 18..."
+        },
+        {
+            "role": "Marketing Strategist",
+            "content": "## Go-to-Market Strategy\n\n### Phase 1: Pre-launch (Months 1-3)\n- Build waiting list through social media\n- Influencer partnerships\n\n### Phase 2: Launch (Month 4)\n- App store optimization\n- PR campaign..."
+        },
+        {
+            "role": "Technical Architect",
+            "content": "## Technical Architecture\n\n### Technology Stack\n- Frontend: React Native (cross-platform)\n- Backend: Node.js with PostgreSQL\n- Cloud: AWS with auto-scaling\n\n### Development Roadmap\n- MVP: 3 months\n- Full launch: 6 months..."
+        }
+    ],
+    "number_of_agents": 4,
+    "service_tier": "standard",
+    "execution_time": 35.2,
+    "usage": {
+        "input_tokens": 150,
+        "output_tokens": 4200,
+        "total_tokens": 4350,
+        "billing_info": {
+            "cost_breakdown": {
+                "agent_cost": 0.04,
+                "input_token_cost": 0.00045,
+                "output_token_cost": 0.063,
+                "num_agents": 4,
+                "service_tier": "standard"
+            },
+            "total_cost": 0.10345
+        }
+    }
+}
+```
+
+## How Auto Selection Works
+
+The system analyzes your task based on several factors:
+
+| Factor | Consideration |
+|--------|---------------|
+| **Task Dependencies** | Sequential tasks → SequentialWorkflow |
+| **Parallel Potential** | Independent subtasks → ConcurrentWorkflow |
+| **Collaboration Needs** | Discussion required → GroupChat |
+| **Decision Making** | Voting/consensus needed → MajorityVoting |
+| **Multi-perspective** | Diverse expertise → MixtureOfAgents |
+| **Task Routing** | Different task types → MultiAgentRouter |
+
+## Best Practices
+
+- Provide detailed task descriptions for better architecture selection
+- Review the `selected_swarm_type` in responses to learn which architectures work best
+- Once you identify optimal patterns, consider using specific swarm types directly
+- Use `auto` for experimentation and prototyping
+- Check `selection_reason` to understand the system's decision
+

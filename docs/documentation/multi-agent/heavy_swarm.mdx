@@ -1,0 +1,407 @@
+---
+name: "HeavySwarm"
+description: "High-capacity multi-agent swarm for complex, resource-intensive tasks requiring deep analysis and extended processing"
+---
+
+**Swarm Type**: `HeavySwarm`
+
+## Overview
+
+The HeavySwarm is designed for complex, resource-intensive tasks that require deep analysis, multiple iterations, and extensive processing. It employs a question-answer pattern with specialized worker agents that can tackle challenging problems through iterative refinement and comprehensive exploration. This architecture is ideal for tasks that would overwhelm simpler swarm configurations.
+
+Key features:
+- **High-Capacity Processing**: Handles complex, multi-faceted tasks
+- **Iterative Refinement**: Multiple loops per agent for deep analysis
+- **Question-Answer Pattern**: Question agent guides worker exploration
+- **Configurable Models**: Separate models for questioning and working
+- **Extended Processing**: Designed for longer-running, thorough tasks
+
+## Use Cases
+
+- Complex research and analysis requiring multiple perspectives
+- Deep technical investigations
+- Comprehensive due diligence processes
+- Multi-stage document analysis
+- Strategic planning with thorough exploration
+- Scientific hypothesis evaluation
+
+## API Usage
+
+### Basic HeavySwarm Example
+
+<Tabs>
+<Tab title="Shell (curl)">
+```bash
+curl -X POST "https://api.swarms.world/v1/swarm/completions" \
+  -H "x-api-key: $SWARMS_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Comprehensive Due Diligence",
+    "description": "Heavy swarm for thorough company analysis",
+    "swarm_type": "HeavySwarm",
+    "task": "Conduct comprehensive due diligence on a potential acquisition target: TechStartup Inc, a Series B AI company with $50M revenue, 200 employees, and proprietary NLP technology. Analyze financials, technology, team, market position, risks, and provide acquisition recommendation.",
+    "heavy_swarm_loops_per_agent": 3,
+    "heavy_swarm_question_agent_model_name": "gpt-4.1",
+    "heavy_swarm_worker_model_name": "claude-sonnet-4-20250514",
+    "max_loops": 1
+  }'
+```
+</Tab>
+
+<Tab title="Python (requests)">
+```python
+import requests
+import json
+
+API_BASE_URL = "https://api.swarms.world"
+API_KEY = "your_api_key_here"
+
+headers = {
+    "x-api-key": API_KEY,
+    "Content-Type": "application/json"
+}
+
+swarm_config = {
+    "name": "Comprehensive Due Diligence",
+    "description": "Heavy swarm for thorough company analysis",
+    "swarm_type": "HeavySwarm",
+    "task": """Conduct comprehensive due diligence on a potential acquisition target:
+    TechStartup Inc, a Series B AI company with $50M revenue, 200 employees, and
+    proprietary NLP technology. Analyze financials, technology, team, market position,
+    risks, and provide acquisition recommendation.""",
+    "heavy_swarm_loops_per_agent": 3,
+    "heavy_swarm_question_agent_model_name": "gpt-4.1",
+    "heavy_swarm_worker_model_name": "claude-sonnet-4-20250514",
+    "max_loops": 1
+}
+
+response = requests.post(
+    f"{API_BASE_URL}/v1/swarm/completions",
+    headers=headers,
+    json=swarm_config,
+    timeout=600  # Extended timeout for heavy processing
+)
+
+if response.status_code == 200:
+    result = response.json()
+    print("HeavySwarm analysis completed!")
+    print(f"Cost: ${result['metadata']['billing_info']['total_cost']}")
+    print(f"Execution time: {result['metadata']['execution_time_seconds']} seconds")
+    print(f"\n=== Analysis Results ===")
+    print(result['output'])
+else:
+    print(f"Error: {response.status_code} - {response.text}")
+```
+</Tab>
+
+<Tab title="JavaScript (fetch)">
+```javascript
+const API_BASE_URL = "https://api.swarms.world";
+const API_KEY = "your_api_key_here";
+
+const headers = {
+    "x-api-key": API_KEY,
+    "Content-Type": "application/json"
+};
+
+const swarmConfig = {
+    name: "Comprehensive Due Diligence",
+    description: "Heavy swarm for thorough company analysis",
+    swarm_type: "HeavySwarm",
+    task: `Conduct comprehensive due diligence on a potential acquisition target:
+           TechStartup Inc, a Series B AI company with $50M revenue, 200 employees,
+           and proprietary NLP technology.`,
+    heavy_swarm_loops_per_agent: 3,
+    heavy_swarm_question_agent_model_name: "gpt-4.1",
+    heavy_swarm_worker_model_name: "claude-sonnet-4-20250514",
+    max_loops: 1
+};
+
+fetch(`${API_BASE_URL}/v1/swarm/completions`, {
+    method: "POST",
+    headers: headers,
+    body: JSON.stringify(swarmConfig)
+})
+.then(response => response.json())
+.then(result => {
+    if (result.status === "success") {
+        console.log("HeavySwarm analysis completed!");
+        console.log(`Cost: $${result.metadata.billing_info.total_cost}`);
+        console.log("Results:", result.output);
+    }
+})
+.catch(error => console.error("Error:", error));
+```
+</Tab>
+
+<Tab title="Go">
+```go
+package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "fmt"
+    "io/ioutil"
+    "net/http"
+    "time"
+)
+
+type SwarmConfig struct {
+    Name                            string `json:"name"`
+    Description                     string `json:"description"`
+    SwarmType                       string `json:"swarm_type"`
+    Task                            string `json:"task"`
+    HeavySwarmLoopsPerAgent         int    `json:"heavy_swarm_loops_per_agent"`
+    HeavySwarmQuestionAgentModelName string `json:"heavy_swarm_question_agent_model_name"`
+    HeavySwarmWorkerModelName       string `json:"heavy_swarm_worker_model_name"`
+    MaxLoops                        int    `json:"max_loops"`
+}
+
+func main() {
+    API_BASE_URL := "https://api.swarms.world"
+    API_KEY := "your_api_key_here"
+
+    swarmConfig := SwarmConfig{
+        Name:                            "Comprehensive Due Diligence",
+        Description:                     "Heavy swarm for thorough company analysis",
+        SwarmType:                       "HeavySwarm",
+        Task:                            "Conduct comprehensive due diligence on TechStartup Inc...",
+        HeavySwarmLoopsPerAgent:         3,
+        HeavySwarmQuestionAgentModelName: "gpt-4.1",
+        HeavySwarmWorkerModelName:       "claude-sonnet-4-20250514",
+        MaxLoops:                        1,
+    }
+
+    jsonData, _ := json.Marshal(swarmConfig)
+
+    client := &http.Client{Timeout: 600 * time.Second}
+    req, _ := http.NewRequest("POST", API_BASE_URL+"/v1/swarm/completions", bytes.NewBuffer(jsonData))
+    req.Header.Set("x-api-key", API_KEY)
+    req.Header.Set("Content-Type", "application/json")
+
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Printf("Error: %v\n", err)
+        return
+    }
+    defer resp.Body.Close()
+
+    body, _ := ioutil.ReadAll(resp.Body)
+    fmt.Printf("Response: %s\n", string(body))
+}
+```
+</Tab>
+
+<Tab title="Rust">
+```rust
+use reqwest::Client;
+use serde_json::{json, Value};
+use std::error::Error;
+use std::time::Duration;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn Error>> {
+    let api_base_url = "https://api.swarms.world";
+    let api_key = "your_api_key_here";
+
+    let swarm_config = json!({
+        "name": "Comprehensive Due Diligence",
+        "description": "Heavy swarm for thorough company analysis",
+        "swarm_type": "HeavySwarm",
+        "task": "Conduct comprehensive due diligence on TechStartup Inc...",
+        "heavy_swarm_loops_per_agent": 3,
+        "heavy_swarm_question_agent_model_name": "gpt-4.1",
+        "heavy_swarm_worker_model_name": "claude-sonnet-4-20250514",
+        "max_loops": 1
+    });
+
+    let client = Client::builder()
+        .timeout(Duration::from_secs(600))
+        .build()?;
+
+    let response = client
+        .post(&format!("{}/v1/swarm/completions", api_base_url))
+        .header("x-api-key", api_key)
+        .header("Content-Type", "application/json")
+        .json(&swarm_config)
+        .send()
+        .await?;
+
+    if response.status().is_success() {
+        let result: Value = response.json().await?;
+        println!("HeavySwarm completed!");
+        println!("Response: {:?}", result);
+    } else {
+        println!("Error: {}", response.status());
+    }
+
+    Ok(())
+}
+```
+</Tab>
+</Tabs>
+
+### HeavySwarm with Custom Agents
+
+You can also provide custom agents for more specialized analysis:
+
+<Tabs>
+<Tab title="Python (requests)">
+```python
+import requests
+
+API_BASE_URL = "https://api.swarms.world"
+API_KEY = "your_api_key_here"
+
+headers = {
+    "x-api-key": API_KEY,
+    "Content-Type": "application/json"
+}
+
+swarm_config = {
+    "name": "Technical Deep Dive",
+    "description": "Heavy swarm with specialized technical agents",
+    "swarm_type": "HeavySwarm",
+    "task": "Analyze the technical architecture and scalability of a distributed microservices system handling 1M requests per second",
+    "agents": [
+        {
+            "agent_name": "Systems Architect",
+            "description": "Analyzes system architecture patterns",
+            "system_prompt": "You are a senior systems architect. Analyze distributed systems for scalability, reliability, and performance. Identify architectural patterns, potential bottlenecks, and improvement opportunities.",
+            "model_name": "gpt-4o",
+            "max_loops": 3,
+            "temperature": 0.3
+        },
+        {
+            "agent_name": "Performance Engineer",
+            "description": "Evaluates system performance",
+            "system_prompt": "You are a performance engineering specialist. Analyze systems for latency, throughput, and resource utilization. Provide specific recommendations for optimization.",
+            "model_name": "gpt-4o",
+            "max_loops": 3,
+            "temperature": 0.3
+        },
+        {
+            "agent_name": "Security Analyst",
+            "description": "Assesses security posture",
+            "system_prompt": "You are a security analyst specializing in distributed systems. Identify security vulnerabilities, compliance gaps, and recommend security controls.",
+            "model_name": "gpt-4o",
+            "max_loops": 3,
+            "temperature": 0.2
+        }
+    ],
+    "heavy_swarm_loops_per_agent": 3,
+    "max_loops": 1
+}
+
+response = requests.post(
+    f"{API_BASE_URL}/v1/swarm/completions",
+    headers=headers,
+    json=swarm_config,
+    timeout=600
+)
+
+result = response.json()
+print(f"Analysis complete: {result['output']}")
+```
+</Tab>
+</Tabs>
+
+**Example Response**:
+```json
+{
+    "job_id": "swarms-HS17nZFDesmLHxCRoeyF3NVYvPaXk",
+    "status": "success",
+    "swarm_name": "Comprehensive Due Diligence",
+    "description": "Heavy swarm for thorough company analysis",
+    "swarm_type": "HeavySwarm",
+    "output": {
+        "executive_summary": "Based on comprehensive analysis across financial, technical, team, and market dimensions, TechStartup Inc presents a MODERATE-HIGH acquisition opportunity...",
+        "analysis_sections": [
+            {
+                "section": "Financial Analysis",
+                "findings": "Revenue growth of 150% YoY indicates strong market traction. However, burn rate of $3M/month suggests 18-month runway...",
+                "risk_level": "moderate",
+                "iterations": 3
+            },
+            {
+                "section": "Technology Assessment",
+                "findings": "Proprietary NLP models show SOTA performance on domain-specific benchmarks. Technical debt is manageable. Architecture is cloud-native and scalable...",
+                "risk_level": "low",
+                "iterations": 3
+            },
+            {
+                "section": "Team Evaluation",
+                "findings": "Leadership team has relevant experience. Key person risk identified with CTO. Engineering team has strong academic credentials...",
+                "risk_level": "moderate",
+                "iterations": 3
+            },
+            {
+                "section": "Market Position",
+                "findings": "Operating in $15B TAM with 0.3% current market share. Competitive moat through proprietary data and models. Key competitors include...",
+                "risk_level": "moderate",
+                "iterations": 3
+            },
+            {
+                "section": "Risk Assessment",
+                "findings": "Primary risks: customer concentration (top 3 customers = 60% revenue), regulatory uncertainty in AI, and competitive pressure from well-funded incumbents...",
+                "risk_level": "high",
+                "iterations": 3
+            }
+        ],
+        "recommendation": {
+            "decision": "PROCEED WITH CAUTION",
+            "suggested_valuation_range": "$180M - $220M",
+            "key_conditions": [
+                "Retention packages for key technical staff",
+                "Customer contract extensions before close",
+                "IP audit and freedom-to-operate analysis"
+            ]
+        }
+    },
+    "processing_details": {
+        "question_agent_model": "gpt-4.1",
+        "worker_model": "claude-sonnet-4-20250514",
+        "loops_per_agent": 3,
+        "total_iterations": 15
+    },
+    "number_of_agents": 5,
+    "service_tier": "standard",
+    "execution_time": 185.4,
+    "usage": {
+        "input_tokens": 450,
+        "output_tokens": 12500,
+        "total_tokens": 12950,
+        "billing_info": {
+            "cost_breakdown": {
+                "agent_cost": 0.05,
+                "input_token_cost": 0.00135,
+                "output_token_cost": 0.1875,
+                "num_agents": 5,
+                "service_tier": "standard"
+            },
+            "total_cost": 0.23885
+        }
+    }
+}
+```
+
+## Configuration Parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `heavy_swarm_loops_per_agent` | integer | 1 | Number of iterations each agent performs |
+| `heavy_swarm_question_agent_model_name` | string | "gpt-4.1" | Model for the question/orchestration agent |
+| `heavy_swarm_worker_model_name` | string | "claude-sonnet-4-20250514" | Model for worker agents |
+| `max_loops` | integer | 1 | Overall swarm loop iterations |
+
+## Best Practices
+
+- Use HeavySwarm for tasks requiring thorough, multi-faceted analysis
+- Set `heavy_swarm_loops_per_agent` to 2-5 for comprehensive exploration
+- Use more capable models for complex reasoning tasks
+- Increase timeout values as HeavySwarm processing takes longer
+- Structure tasks with clear analytical dimensions for better coverage
+- Consider cost implications - HeavySwarm uses more tokens than lighter swarms
+- Use streaming for better UX during long-running analyses
+
